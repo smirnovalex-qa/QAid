@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Отменяем устаревшие прогоны на той же ветке/PR.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Минимум прав по умолчанию; ни один job здесь не пишет в репозиторий.
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Качество (typecheck · lint · test · build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm до setup-node: setup-node с cache:'pnpm' требует уже доступный pnpm.
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0 # == packageManager в package.json
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      # Шаги по нарастанию стоимости — быстрый fail-fast на дешёвых проверках.
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Format check
+        run: pnpm format:check
+
+      - name: Unit tests + coverage gate
+        run: pnpm test:coverage
+
+      - name: Build extension
+        run: pnpm build
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload build
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 14
+
+  commitlint:
+    name: Commit messages (Conventional Commits)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # нужен диапазон коммитов PR
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint PR commits
+        run: >-
+          pnpm exec commitlint
+          --from ${{ github.event.pull_request.base.sha }}
+          --to ${{ github.event.pull_request.head.sha }}
+          --verbose
