@@ -1,9 +1,9 @@
 {
-  "name": "qa-toolbox",
+  "name": "qanvil",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "QA Toolbox — local-first Manifest V3 extension with a consolidated set of QA tools.",
+  "description": "QAnvil — local-first Manifest V3 extension with a consolidated set of QA tools.",
   "license": "Apache-2.0",
   "packageManager": "pnpm@9.12.0",
   "engines": {

@@ -1,5 +1,5 @@
 /**
- * Структурное логирование с префиксом `[qa-toolbox]`.
+ * Структурное логирование с префиксом `[qanvil]`.
  *
  * `debug` — дешёвый no-op в prod-сборке (`import.meta.env.PROD`). Логи никуда не
  * отправляются: приватность и local-first (PRD §9 / ARCHITECTURE §11).
@@ -7,7 +7,7 @@
 
 type Level = 'debug' | 'info' | 'warn' | 'error';
 
-const PREFIX = '[qa-toolbox]';
+const PREFIX = '[qanvil]';
 const isProd = import.meta.env.PROD;
 
 function emit(level: Level, args: unknown[]): void {

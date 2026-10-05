@@ -1,6 +1,6 @@
 # RELEASING — релизный процесс и CI/CD
 
-Процесс доставки QA Toolbox: проверки на PR, версионирование и выпуск
+Процесс доставки QAnvil: проверки на PR, версионирование и выпуск
 подписываемого zip для Chrome Web Store. Общие стандарты — в
 [docs/CONTRIBUTING.md](./docs/CONTRIBUTING.md).
 
@@ -47,7 +47,7 @@ breaking→major.
 5. Тег запускает job `release`: полный гейт качества → `pnpm build` →
    `check-version` → `pnpm run package` (zip в `dist-zip/`) →
    `scripts/release-notes.mjs` → **draft** GitHub Release с вложенным
-   `qa-toolbox-<version>.zip` и заметками (включая секцию _Chrome Web Store
+   `qanvil-<version>.zip` и заметками (включая секцию _Chrome Web Store
    submission notes_ с правами и обоснованием).
 6. Человек проверяет draft-релиз (артефакт, права) и публикует.
 

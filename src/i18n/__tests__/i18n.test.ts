@@ -33,6 +33,6 @@ describe('i18n', () => {
     mergeCatalog('ru', { 'feature.x.title': 'Фича X' });
     setLocale('ru');
     expect(t('feature.x.title')).toBe('Фича X');
-    expect(t('app.title')).toBe('QA Toolbox');
+    expect(t('app.title')).toBe('QAnvil');
   });
 });

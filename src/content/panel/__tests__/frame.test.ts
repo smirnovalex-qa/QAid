@@ -7,7 +7,7 @@ const labels = { collapse: 'Свернуть', expand: 'Развернуть', c
 function make(): PanelFrameParts {
   return createPanelFrame({
     iframeSrc: 'chrome-extension://abc/src/panel/index.html#nonce-xyz',
-    title: 'QA Toolbox',
+    title: 'QAnvil',
     labels,
     width: 380,
     height: 560,

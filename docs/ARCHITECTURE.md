@@ -1,4 +1,4 @@
-# Архитектура — QA Toolbox
+# Архитектура — QAnvil
 
 Технический обзор для исполнителей. Единый источник правды по стеку, границам модулей и соглашениям. Любое отклонение фиксируется как ADR в [DECISIONS.md](./DECISIONS.md).
 
@@ -6,7 +6,7 @@
 
 ## 1. Обзор
 
-QA Toolbox — расширение Manifest V3 с несколькими поверхностями (popup, side panel, background service worker, content scripts, page-context/MAIN-world скрипт). Основная логика инструментов — чистые функции без зависимостей от DOM/Chrome, что делает их полностью юнит-тестируемыми. UI строится на Preact и подключает фичи через реестр (feature registry).
+QAnvil — расширение Manifest V3 с несколькими поверхностями (popup, side panel, background service worker, content scripts, page-context/MAIN-world скрипт). Основная логика инструментов — чистые функции без зависимостей от DOM/Chrome, что делает их полностью юнит-тестируемыми. UI строится на Preact и подключает фичи через реестр (feature registry).
 
 Ключевые архитектурные принципы:
 

@@ -7,7 +7,7 @@
 import { mergeCatalog } from '@/i18n';
 
 const EN: Record<string, string> = {
-  'panel.title': 'QA Toolbox',
+  'panel.title': 'QAnvil',
   'panel.collapse': 'Collapse',
   'panel.expand': 'Expand',
   'panel.close': 'Close panel',
@@ -17,7 +17,7 @@ const EN: Record<string, string> = {
 };
 
 const RU: Record<string, string> = {
-  'panel.title': 'QA Toolbox',
+  'panel.title': 'QAnvil',
   'panel.collapse': 'Свернуть',
   'panel.expand': 'Развернуть',
   'panel.close': 'Закрыть панель',

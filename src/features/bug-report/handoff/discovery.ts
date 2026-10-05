@@ -2,7 +2,7 @@
  * Авто-обнаружение баг-репортов AI-агентами (TASK-042) — ЧИСТЫЕ генераторы текста
  * и дескрипторов, БЕЗ DOM, `chrome.*` и записи файлов. Модуль лишь СОБИРАЕТ (a)
  * секцию правил (rule-file), сообщающую агенту, что артефакты живут в
- * `.qa-toolbox/bug-reports/` (свежайший — `latest.md`), и (b) фрагмент MCP-конфига,
+ * `.qanvil/bug-reports/` (свежайший — `latest.md`), и (b) фрагмент MCP-конфига,
  * нацеливающий готовый filesystem-MCP-сервер (через `npx -y
  * @modelcontextprotocol/server-filesystem <abs reports dir>`) на эту папку. UI
  * (оркестратор) отдельно строит интерфейс и запись через File System Access.
@@ -23,11 +23,11 @@ import { validateCwd } from './deep-link';
 // ── константы ────────────────────────────────────────────────────────────────
 
 /** Стабильные HTML-комментарии-маркеры блока правил (для идемпотентного слияния). */
-export const RULE_MARKER_BEGIN = '<!-- qa-toolbox:begin -->' as const;
-export const RULE_MARKER_END = '<!-- qa-toolbox:end -->' as const;
+export const RULE_MARKER_BEGIN = '<!-- qanvil:begin -->' as const;
+export const RULE_MARKER_END = '<!-- qanvil:end -->' as const;
 
 /** Имя MCP-сервера в конфиге (стабильный ключ для идемпотентного слияния). */
-export const MCP_SERVER_NAME = 'qa-toolbox-reports' as const;
+export const MCP_SERVER_NAME = 'qanvil-reports' as const;
 
 /** Пакет готового off-the-shelf filesystem MCP-сервера (мы его НЕ публикуем). */
 export const FILESYSTEM_MCP_PACKAGE = '@modelcontextprotocol/server-filesystem' as const;
@@ -67,7 +67,7 @@ export const DISCOVERY_TARGETS = [
   { id: 'claude-code', ruleFile: 'CLAUDE.md', mcpFile: '.mcp.json', format: 'json' },
   {
     id: 'cursor',
-    ruleFile: '.cursor/rules/qa-toolbox.md',
+    ruleFile: '.cursor/rules/qanvil.md',
     mcpFile: '.cursor/mcp.json',
     format: 'json',
   },
@@ -124,16 +124,16 @@ const resolveReportsDir = (input: DiscoveryInput): { dir: string; hasPath: boole
 
 /**
  * Строит блок правил, обёрнутый в стабильные маркеры. Содержимое одинаково для всех
- * rule-файлов (`CLAUDE.md` / `.cursor/rules/qa-toolbox.md` / `AGENTS.md`) — различие
+ * rule-файлов (`CLAUDE.md` / `.cursor/rules/qanvil.md` / `AGENTS.md`) — различие
  * лишь в файле-адресате (см. `DISCOVERY_TARGETS`). Указывает агенту относительный
  * путь каталога репортов и свежайший файл `latest.md`.
  */
 export const renderRuleSection = (): string =>
   [
     RULE_MARKER_BEGIN,
-    '## QA Toolbox — баг-репорты',
+    '## QAnvil — баг-репорты',
     '',
-    `Артефакты багов от расширения QA Toolbox лежат в \`${HANDOFF_DIR}/\` (в корне проекта).`,
+    `Артефакты багов от расширения QAnvil лежат в \`${HANDOFF_DIR}/\` (в корне проекта).`,
     `Свежайший отчёт всегда — \`${LATEST_RELATIVE}\`; это самодостаточный Markdown с шагами`,
     'воспроизведения, окружением, консолью, сетью и машиночитаемым JSON.',
     '',
@@ -185,7 +185,7 @@ const serverEntry = (dir: string): McpServerEntry => ({
 
 /**
  * JSON-фрагмент для `.mcp.json` / `.cursor/mcp.json`:
- * `{ "mcpServers": { "qa-toolbox-reports": { "command": "npx", "args": [...] } } }`.
+ * `{ "mcpServers": { "qanvil-reports": { "command": "npx", "args": [...] } } }`.
  * Сериализация с отступом в 2 пробела.
  */
 export const renderMcpJson = (input: DiscoveryInput): McpFragment => {
@@ -220,7 +220,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 /**
  * Идемпотентно вливает наш сервер в существующий JSON MCP-конфига: парсит вход
  * (`JSON.parse`; при ошибке — начинает с чистого объекта), выставляет
- * `mcpServers["qa-toolbox-reports"]`, НЕ теряя прочие серверы пользователя, и
+ * `mcpServers["qanvil-reports"]`, НЕ теряя прочие серверы пользователя, и
  * ресериализует с отступом в 2 пробела. Повторный прогон → тот же результат.
  */
 export const mergeMcpJson = (existingJson: string, input: DiscoveryInput): string => {

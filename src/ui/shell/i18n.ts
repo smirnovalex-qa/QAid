@@ -25,7 +25,7 @@ const EN: Record<string, string> = {
   'shell.syncSubOn': 'Last synced just now',
   'shell.quota': 'Used of browser sync quota',
   'shell.syncNote':
-    'Uses your browser account. No QA Toolbox server. When it conflicts, the latest change wins.',
+    'Uses your browser account. No QAnvil server. When it conflicts, the latest change wins.',
   'shell.secretsNote': 'Secrets never leave this device',
   'shell.panelTitle': 'Opens in the side panel',
   'shell.panelBody':
@@ -75,7 +75,7 @@ const RU: Record<string, string> = {
   'shell.syncSubOn': 'Синхронизировано только что',
   'shell.quota': 'Занято из квоты синхронизации',
   'shell.syncNote':
-    'Через аккаунт браузера, без серверов QA Toolbox. При конфликте побеждает последнее изменение.',
+    'Через аккаунт браузера, без серверов QAnvil. При конфликте побеждает последнее изменение.',
   'shell.secretsNote': 'Секреты не покидают это устройство',
   'shell.panelTitle': 'Работает в боковой панели',
   'shell.panelBody':

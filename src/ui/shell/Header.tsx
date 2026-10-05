@@ -36,7 +36,7 @@ export function Header(props: HeaderProps): JSX.Element {
       {home ? (
         <div class={styles.brand}>
           <BrandLogo size={22} />
-          <span class={styles.brandTitle}>QA Toolbox</span>
+          <span class={styles.brandTitle}>QAnvil</span>
         </div>
       ) : (
         <>

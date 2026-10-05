@@ -1,4 +1,4 @@
-# QA Toolbox
+# QAnvil
 
 Local-first набор QA-инструментов в одном расширении Chrome (Manifest V3): генераторы
 тест-данных, декодеры, инспекторы. Ядро работает офлайн и не делает сетевых вызовов
@@ -67,7 +67,7 @@ pnpm install
 3. **Load unpacked** → выбрать папку `dist/`.
 4. Клик по иконке открывает **popup**; кнопка «Открыть side panel» открывает
    боковую панель (`chrome.sidePanel.open`, требует жеста пользователя).
-5. Service worker логирует `[qa-toolbox] installed` (см. «service worker» в
+5. Service worker логирует `[qanvil] installed` (см. «service worker» в
    `chrome://extensions`).
 
 Для разработки: `pnpm dev` даёт HMR для popup/side panel (@crxjs).
@@ -78,7 +78,7 @@ pnpm install
 pnpm package
 ```
 
-Собирает прод-версию и создаёт `dist-zip/qa-toolbox-<version>.zip` (без
+Собирает прод-версию и создаёт `dist-zip/qanvil-<version>.zip` (без
 source maps). Версия берётся из `package.json` (semver → `manifest.version`,
 полный semver — в `version_name`). Права — минимальные (`storage`, `sidePanel`);
 подробности в [docs/PERMISSIONS.md](docs/PERMISSIONS.md).

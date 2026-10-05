@@ -1,5 +1,5 @@
 /**
- * Ключи хранилища QA Toolbox.
+ * Ключи хранилища QAnvil.
  *
  * Формат: `qatb:v<schemaVersion>:<namespace>:<key>`,
  * напр. `qatb:v2:random-numbers:last`. Единый префикс позволяет отличать

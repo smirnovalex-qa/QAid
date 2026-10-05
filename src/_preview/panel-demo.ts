@@ -23,7 +23,7 @@ const MARGIN = 16;
 function demoBody(): string {
   const html = `<!doctype html><html><body style="margin:0;font-family:system-ui,sans-serif">
     <div style="padding:16px;color:#3c4043">
-      <div style="font-weight:600;font-size:14px;margin-bottom:8px;color:#1f2430">QA Toolbox</div>
+      <div style="font-weight:600;font-size:14px;margin-bottom:8px;color:#1f2430">QAnvil</div>
       <div style="font-size:13px;line-height:1.5">
         Демо тела плавающей панели. Тяните заголовок, чтобы перемещать; «–» — свернуть, «×» — закрыть.
         В расширении здесь рендерится реальная поверхность <code>QASurface variant="panel"</code>.

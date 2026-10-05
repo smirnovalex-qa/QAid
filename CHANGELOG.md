@@ -1,4 +1,4 @@
-# qa-toolbox
+# qanvil
 
 Журнал изменений ведётся автоматически через [changesets](https://github.com/changesets/changesets).
 Новые версии добавляются сверху при выпуске Version PR (см. [RELEASING.md](./RELEASING.md)).

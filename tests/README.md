@@ -1,6 +1,6 @@
 # Тестовый харнес и конвенции (TASK-011)
 
-Инфраструктура тестов QA Toolbox: Vitest (unit/компонентные), Playwright (e2e
+Инфраструктура тестов QAnvil: Vitest (unit/компонентные), Playwright (e2e
 поверх собранного расширения), axe (a11y). Конфиги — в корне репозитория
 (`vitest.config.ts`, `playwright.config.ts`), общие моки/фикстуры/сетап — здесь.
 

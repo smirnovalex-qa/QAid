@@ -144,7 +144,7 @@ export interface PromptInput {
 
 /** Одна строка преамбулы: постановка задачи агенту (детерминированно, EN). */
 const PROMPT_PREAMBLE =
-  'You are an AI coding agent. Investigate and fix a browser bug captured by QA Toolbox.';
+  'You are an AI coding agent. Investigate and fix a browser bug captured by QAnvil.';
 
 /**
  * Усекает промпт под лимит, честно помечая усечение и СОХРАНЯЯ указатель на файл

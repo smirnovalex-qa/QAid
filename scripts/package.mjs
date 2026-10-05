@@ -7,7 +7,7 @@
  * Предполагает предварительный `pnpm build`; вызывается через `pnpm package`
  * (= `pnpm build && node scripts/package.mjs`).
  *
- * Результат: `dist-zip/qa-toolbox-<version>.zip`.
+ * Результат: `dist-zip/qanvil-<version>.zip`.
  */
 import { createWriteStream, existsSync } from 'node:fs';
 import { mkdir, readFile } from 'node:fs/promises';
@@ -23,7 +23,7 @@ if (!existsSync(distDir)) {
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
 const outDir = resolve('dist-zip');
 await mkdir(outDir, { recursive: true });
-const outFile = resolve(outDir, `qa-toolbox-${pkg.version}.zip`);
+const outFile = resolve(outDir, `qanvil-${pkg.version}.zip`);
 
 const output = createWriteStream(outFile);
 const archive = archiver('zip', { zlib: { level: 9 } });
