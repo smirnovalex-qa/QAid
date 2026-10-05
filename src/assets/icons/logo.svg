@@ -1,0 +1,12 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QA Toolbox">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#4338CA"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="120" height="120" rx="26" fill="url(#bg)"/>
+  <text x="50%" y="52%" text-anchor="middle" dominant-baseline="central"
+        font-family="'Segoe UI', Arial, system-ui, sans-serif" font-weight="700"
+        font-size="58" fill="#FFFFFF" letter-spacing="-2">QA</text>
+</svg>
