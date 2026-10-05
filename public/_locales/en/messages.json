@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "QA Toolbox",
+    "description": "Extension name"
+  },
+  "appDesc": {
+    "message": "A consolidated set of QA tools: generators, inspector, storage, decoders. Local and private.",
+    "description": "Short extension description"
+  }
+}

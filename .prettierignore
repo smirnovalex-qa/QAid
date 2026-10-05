@@ -1,0 +1,10 @@
+dist
+coverage
+node_modules
+pnpm-lock.yaml
+playwright-report
+test-results
+*.zip
+
+# Документация форматируется вручную и вне scope тулинга.
+docs/
