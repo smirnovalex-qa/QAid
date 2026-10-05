@@ -1,0 +1,15 @@
+/* Карточка-контейнер: поверхность + hairline-граница (редизайн). */
+.root {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.title {
+  margin: 0 0 var(--space-3);
+  font-size: var(--fs-3);
+  line-height: var(--lh-tight);
+  font-weight: 600;
+  color: var(--fg);
+}

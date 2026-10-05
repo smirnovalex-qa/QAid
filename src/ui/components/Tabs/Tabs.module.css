@@ -1,0 +1,42 @@
+/* Табы (под-вкладки фич): подчёркивание активной через --accent (редизайн). */
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.tablist {
+  display: flex;
+  gap: var(--space-1);
+  border-bottom: 1px solid var(--line);
+}
+
+.tab {
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-2);
+  font-weight: 500;
+  line-height: var(--lh-tight);
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+.tab:hover {
+  color: var(--fg);
+}
+
+.tabActive {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+}
+
+.panel {
+  padding-top: var(--space-3);
+}

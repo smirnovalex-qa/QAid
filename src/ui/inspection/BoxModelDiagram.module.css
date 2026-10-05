@@ -1,0 +1,108 @@
+/*
+ * Диаграмма box-model: вложенные слои с числами сторон, в стиле DevTools, но в
+ * палитре дизайн-системы (zinc + indigo, мягкие тона слоёв). Слои — вложенные
+ * relative-контейнеры; значения сторон позиционированы по центрам кромок.
+ */
+.diagram {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-1) 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-1);
+  color: var(--fg);
+  user-select: text;
+}
+
+/* Общий слой: относительный контейнер, полоса задаётся паддингом. */
+.layer {
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  /* Полоса под числа сторон сверху/снизу (16px) и слева/справа (44px). */
+  padding: 17px 44px;
+  text-align: center;
+}
+
+/* margin — тёплый тон (amber), пунктир как у «внешнего» слоя. */
+.margin {
+  background: color-mix(in srgb, var(--warning) 12%, transparent);
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--warning) 45%, transparent);
+}
+/* border — нейтральный тон. */
+.border {
+  background: color-mix(in srgb, var(--faint) 20%, transparent);
+  border-color: color-mix(in srgb, var(--faint) 55%, transparent);
+}
+/* padding — «внутренний» тон (green). */
+.padding {
+  background: color-mix(in srgb, var(--success) 14%, transparent);
+  border-color: color-mix(in srgb, var(--success) 45%, transparent);
+}
+
+.layerLabel {
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  pointer-events: none;
+}
+
+/* Значения сторон — по центрам кромок слоя. */
+.side {
+  position: absolute;
+  color: var(--fg-muted);
+  line-height: 1;
+  white-space: nowrap;
+}
+.sideTop {
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.sideBottom {
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.sideLeft {
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.sideRight {
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Центр — контент: размер W×H на акцентной подложке. */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 92px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.contentLabel {
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.contentSize {
+  font-weight: 600;
+  color: var(--fg);
+  white-space: nowrap;
+}

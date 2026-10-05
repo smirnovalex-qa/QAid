@@ -1,0 +1,105 @@
+/* Строка-переключатель v3: подпись + хелп слева, презентационный switch справа. */
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 44px;
+  text-align: left;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+.root[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Вид `card`: рамка/padding, подсветка акцентом во включённом состоянии. */
+.card {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.card.on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Вид `plain`: без рамки (строка внутри карточки/списка). */
+.plain {
+  padding: 4px 0;
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--muted);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--fs-title-row);
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.help {
+  font-size: var(--fs-help);
+  line-height: 1.4;
+  color: var(--subtle);
+}
+
+.helpWarn {
+  color: var(--warn-ink);
+}
+
+/* ── презентационный переключатель (несущую роль держит строка) ────────── */
+.swTrack {
+  position: relative;
+  flex: none;
+  width: 36px;
+  height: 22px;
+  border-radius: var(--radius-pill);
+  background: var(--switch-off);
+  transition: background-color 0.15s var(--ease);
+}
+
+.swOn {
+  background: var(--accent);
+}
+
+.swKnob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--shadow-knob);
+  transition: left 0.15s var(--ease);
+}
+
+.swOn .swKnob {
+  left: 17px;
+}

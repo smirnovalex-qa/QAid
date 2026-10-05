@@ -1,0 +1,725 @@
+/*
+ * Единая поверхность QA Toolbox — v3 (модель Home → Tool). Одна и та же
+ * поверхность рендерится в side panel и popup; размер задаёт контейнер точки
+ * входа. Все цвета — через семантические токены (tokens.css).
+ */
+.surface {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+}
+
+/* ── хедер (52px, фиксированный) ──────────────────────────────────────── */
+.header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 52px;
+  padding: 0 8px 0 10px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.brandTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.backBtn,
+.iconBtn,
+.pinBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.backBtn:hover,
+.iconBtn:hover {
+  background: var(--surface2);
+  color: var(--fg);
+}
+
+.toolName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.headSpacer {
+  flex: 1;
+}
+
+.pinBtn:hover {
+  background: var(--surface2);
+}
+
+.pinBtnActive {
+  color: var(--accent);
+}
+
+/* живая пилюля */
+.livePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 11px;
+  border: 1px solid var(--danger-line);
+  border-radius: var(--radius-pill);
+  background: var(--danger-soft);
+  color: var(--danger-ink);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.livePillText {
+  font-family: var(--font-mono);
+}
+
+.liveDot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--danger);
+  animation: qatbBlink 1.2s steps(1) infinite;
+}
+
+@keyframes qatbBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ── тело (скролл) ────────────────────────────────────────────────────── */
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ── home ─────────────────────────────────────────────────────────────── */
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 14px 14px 28px;
+}
+
+.searchField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 11px;
+  background: var(--surface);
+}
+
+.searchField:focus-within {
+  border-color: var(--accent);
+}
+
+.searchIcon {
+  flex: none;
+  display: inline-flex;
+  color: var(--muted);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: var(--subtle);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sectionTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.sectionHint {
+  font-size: 12px;
+  color: var(--subtle);
+}
+
+/* active-on-tab */
+.activeList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.activeRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 12px;
+  border: 1px solid var(--accent-line);
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.activeDot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+}
+
+.activeName {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.activeText {
+  margin-left: auto;
+  font-size: 12px;
+}
+
+/* pinned grid */
+.pinGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.pinCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.pinCard:hover {
+  border-color: var(--accent);
+}
+
+.pinTile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff;
+}
+
+.pinName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* catalog */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.groupHead {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.catCard {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.catRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 9px 12px;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.catRow:last-child {
+  border-bottom: none;
+}
+
+.catRow:hover {
+  background: var(--surface2);
+}
+
+.catTile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.catText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.catName {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.catDesc {
+  font-size: 12px;
+  color: var(--subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.catChevron {
+  flex: none;
+  display: inline-flex;
+  color: var(--subtle);
+}
+
+/* search results (home) */
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.resultRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 50px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.resultFirst {
+  background: var(--accent-soft);
+}
+
+.empty {
+  padding: 16px 4px;
+  color: var(--subtle);
+  font-size: 13px;
+}
+
+/* ── settings ─────────────────────────────────────────────────────────── */
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 18px 16px 28px;
+}
+
+.setBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 12px 14px;
+}
+
+.cardOn {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.syncHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.syncTitle {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.syncSub {
+  font-size: 12px;
+  color: var(--subtle);
+  margin-top: 2px;
+}
+
+.nsList {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.nsRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 0;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.nsRow:last-child {
+  border-bottom: none;
+}
+
+.nsBox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 5px;
+  border: 1.5px solid var(--switch-off);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.nsBoxOn {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.nsBoxLocked {
+  border-style: dashed;
+  color: var(--subtle);
+}
+
+.nsText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.nsName {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.nsSub {
+  font-size: 12px;
+  color: var(--subtle);
+}
+
+.nsSize {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--subtle);
+}
+
+.quota {
+  margin-top: 12px;
+}
+
+.quotaBar {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--surface2);
+  overflow: hidden;
+}
+
+.quotaFill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+}
+
+.quotaLabel {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--subtle);
+}
+
+.note {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--subtle);
+}
+
+.shortcutRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 34px;
+}
+
+.shortcutLabel {
+  font-size: 13px;
+  color: var(--fg);
+}
+
+.shortcutKeys {
+  display: inline-flex;
+  gap: 4px;
+}
+
+/* ── ⌘K-палитра ───────────────────────────────────────────────────────── */
+.palOverlay {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay);
+  z-index: var(--z-modal);
+}
+
+.palCard {
+  position: absolute;
+  top: 58px;
+  left: 10px;
+  right: 10px;
+  max-height: calc(100% - 72px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-palette);
+  overflow: hidden;
+  animation: qatbPop var(--dur-fast) var(--ease);
+}
+
+.palHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 50px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.palInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  outline: none;
+}
+
+.palList {
+  overflow-y: auto;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+@keyframes qatbPop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── popup fallback ───────────────────────────────────────────────────── */
+.fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 40px 24px;
+}
+
+.fallbackTile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  margin-bottom: 4px;
+}
+
+.fallbackTitle {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.fallbackText {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--subtle);
+  max-width: 280px;
+}
+
+.fallbackBtn {
+  margin-top: 8px;
+  width: 100%;
+  max-width: 240px;
+}
+
+/* ── tool body ────────────────────────────────────────────────────────── */
+.toolBody {
+  padding: 14px 14px 28px;
+}
+
+/* ── ленивая загрузка тела фичи (LazyPanel) ───────────────────────────── */
+.lazyLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+}
+
+.lazySpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-strong);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: qatbSpin 0.7s linear infinite;
+}
+
+.lazyError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+@keyframes qatbSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

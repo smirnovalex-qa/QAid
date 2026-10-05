@@ -1,0 +1,39 @@
+/* Моно-бейдж статуса (редизайн): мягкий тон-фон + насыщенный цвет текста. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.neutral {
+  background: var(--surface2);
+  color: var(--fg-muted);
+  border: 1px solid var(--border);
+}
+
+.success {
+  background: color-mix(in srgb, var(--success) 14%, transparent);
+  color: var(--success);
+}
+
+.danger {
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: var(--danger);
+}
+
+.warning {
+  background: color-mix(in srgb, var(--warning) 14%, transparent);
+  color: var(--warning);
+}
+
+.accent {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}

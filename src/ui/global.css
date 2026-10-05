@@ -1,0 +1,112 @@
+/*
+ * Базовые глобальные стили. Импортируется ОДИН раз в entry (popup/sidepanel)
+ * вместе с tokens.css — не в каждом модуле, иначе дублирование.
+ */
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  /* тело 12.5–13px (редизайн); заголовки/кнопки задают свой размер локально */
+  font-size: var(--fs-2);
+  line-height: var(--lh-normal);
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Акцентная подсветка выделения (мягкий indigo-тинт). */
+::selection {
+  background: rgb(79 70 229 / 0.18);
+}
+
+/*
+ * Uppercase-подписи полей/секций: моно, мелкий кегль, широкий трекинг, faint.
+ * Утилита для оболочки/фич, где нет собственного CSS-модуля под подпись.
+ */
+.qatb-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/*
+ * Анимации плавающих слоёв. Гасятся глобально через prefers-reduced-motion
+ * (см. tokens.css). qatbPop — палитра/меню; qatbToast — тост (~1.65s).
+ */
+@keyframes qatbPop {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes qatbToast {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+
+  12% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  88% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 4px);
+  }
+}
+
+/* Единое фокус-кольцо для клавиатурной навигации (a11y). Никаких голых
+   outline:none — только видимая замена через --focus-ring. */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button {
+  font: inherit;
+}
+
+.qatb-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

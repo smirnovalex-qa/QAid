@@ -1,0 +1,63 @@
+/* Раскрывающийся блок v3. */
+.root {
+  width: 100%;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 38px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  text-align: left;
+}
+
+.label {
+  font-size: var(--fs-body);
+  font-weight: 500;
+}
+
+.summary {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+.chevron {
+  flex: none;
+  margin-left: auto;
+  display: inline-flex;
+  color: var(--muted);
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.panel {
+  padding-top: var(--space-2);
+  animation: reveal var(--dur-fast) var(--ease);
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,58 @@
+/*
+ * Тосты (редизайн): тёмная моно-пилюля по центру снизу. Тёмный фон одинаков
+ * в обеих темах (примитивы zinc-900/zinc-50) — как в эталоне. Контейнер —
+ * живой регион поверх всего (--z-toast).
+ */
+.container {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-4);
+  transform: translateX(-50%);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: min(320px, calc(100% - 2 * var(--space-4)));
+  pointer-events: none;
+}
+
+.toast {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--c-zinc-900);
+  color: var(--c-zinc-50);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-toast);
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-code);
+  line-height: var(--lh-tight);
+  white-space: nowrap;
+  pointer-events: auto;
+  animation: toastIn var(--dur-base) var(--ease);
+}
+
+/* Статусный глиф перед сообщением (✓ / ✕). */
+.success::before {
+  content: '✓';
+  color: var(--c-green-400);
+}
+
+.danger::before {
+  content: '✕';
+  color: var(--c-red-400);
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

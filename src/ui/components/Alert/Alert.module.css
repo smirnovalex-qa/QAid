@@ -1,0 +1,36 @@
+/* Блок-уведомление v3: радиус 9, мягкий фон + ink-текст. */
+.alert {
+  border-radius: var(--radius-input);
+  padding: 9px 12px;
+  font-size: var(--fs-code);
+  line-height: 1.45;
+}
+
+.title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.body {
+  min-width: 0;
+}
+
+.danger {
+  background: var(--danger-soft);
+  color: var(--danger-ink);
+}
+
+.warn {
+  background: var(--warn-soft);
+  color: var(--warn-ink);
+}
+
+.success {
+  background: var(--success-soft);
+  color: var(--success-ink);
+}
+
+.info {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}

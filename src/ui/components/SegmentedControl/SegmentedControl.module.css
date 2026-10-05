@@ -1,0 +1,57 @@
+/*
+ * Сегментированный переключатель v3: трек --surface2 + 1px --line, радиус 10,
+ * padding 3. Выбранный сегмент = --surface + 1px --accent + --accent-ink/600.
+ */
+.root {
+  display: flex;
+  gap: 3px;
+  width: 100%;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-btn);
+  background: var(--surface2);
+}
+
+.segment {
+  appearance: none;
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-seg);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  line-height: var(--lh-tight);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.segment:hover:not(.segmentActive) {
+  color: var(--fg);
+}
+
+.segmentActive {
+  background: var(--surface);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+/* ── размеры (высота сегмента) ────────────────────────────────────────── */
+.md .segment {
+  height: 34px;
+  font-size: var(--fs-body);
+}
+
+.sm .segment {
+  height: 30px;
+  font-size: var(--fs-code);
+}

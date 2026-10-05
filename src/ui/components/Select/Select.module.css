@@ -1,0 +1,145 @@
+/* Select: кастомный listbox-комбобокс (редизайн). Триггер повторяет вид поля,
+   всплывающий список — порталом в <body> (position: fixed), стилизован под меню. */
+.wrap {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+}
+
+.trigger {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  padding: 9px var(--space-6) 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-field);
+  background: var(--input);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-input);
+  line-height: var(--lh-normal);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.trigger:hover:not(:disabled) {
+  border-color: var(--fg-muted);
+}
+
+.trigger:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.trigger[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Декоративная стрелка (не перехватывает клики), поворот при открытии. */
+.wrap::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: var(--space-3);
+  width: 0.5em;
+  height: 0.5em;
+  border-right: 2px solid var(--fg-muted);
+  border-bottom: 2px solid var(--fg-muted);
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform var(--dur-fast) var(--ease);
+  pointer-events: none;
+}
+
+.wrap[data-open='true']::after {
+  transform: translateY(-30%) rotate(-135deg);
+}
+
+/* Всплывающий список: портал в <body>, фиксированное позиционирование. */
+.popup {
+  position: fixed;
+  z-index: var(--z-modal);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 4px;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 8px);
+  box-shadow: var(--shadow-menu);
+  animation: qatbSelectPop var(--dur-fast) var(--ease);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 7px 8px;
+  border-radius: var(--radius-field);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-input);
+  line-height: var(--lh-normal);
+  cursor: pointer;
+  user-select: none;
+}
+
+.optionLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.optionActive {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.optionSelected {
+  color: var(--accent-strong);
+}
+
+.check {
+  flex: none;
+  font-size: 11px;
+  color: var(--accent-strong);
+}
+
+@keyframes qatbSelectPop {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup {
+    animation: none;
+  }
+  .wrap::after {
+    transition: none;
+  }
+}

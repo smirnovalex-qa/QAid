@@ -1,0 +1,28 @@
+/* Field: вертикальная раскладка label/контрол/подсказка (редизайн). */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* label — uppercase-подпись: моно, мелкий кегль, широкий трекинг, faint. */
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.hint {
+  font-family: var(--font-sans);
+  font-size: var(--fs-1);
+  color: var(--fg-muted);
+}
+
+.error {
+  font-family: var(--font-sans);
+  font-size: var(--fs-1);
+  color: var(--danger);
+}

@@ -1,0 +1,210 @@
+/*
+ * Дизайн-токены QA Toolbox — v3.
+ *
+ * Двухслойная система: примитивы (сырые значения) → семантические токены
+ * (роли). Компоненты используют ТОЛЬКО семантические токены (--bg, --fg,
+ * --accent, --accent-ink, …), никогда примитивы напрямую. Тёмная тема
+ * переопределяет семантический слой.
+ *
+ * Палитра v3 — zinc-нейтрали + indigo-акцент (конфигурируемый). Значения точно
+ * сверены с `renderVals()` → `themeVars` в эталоне v3-дизайна.
+ *
+ * Легаси-алиасы (--fg-muted, --faint, --radius-field, --fs-label, …) сохранены и
+ * указывают на ближайший v3-токен: фичи мигрируют на новый слой постепенно, без
+ * поломки ещё не переписанного CSS. Новый код использует только v3-роли.
+ */
+:root {
+  /* ── primitives: neutrals (zinc) ─────────────────────────────────────── */
+  --c-zinc-50: #fafafa;
+  --c-zinc-100: #f6f6f7;
+  --c-zinc-200: #e4e4e7;
+  --c-zinc-300: #d4d4d8;
+  --c-zinc-400: #a1a1aa;
+  --c-zinc-500: #71717a;
+  --c-zinc-600: #52525b;
+  --c-zinc-900: #18181b;
+  --c-white: #fff;
+
+  /* ── primitives: accent (indigo, default) ────────────────────────────── */
+  --c-indigo-600: #4f46e5;
+  --c-indigo-700: #4338ca;
+
+  /* ── spacing scale (4pt) ─────────────────────────────────────────────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* ── radii (v3): 5 keycaps/tags · 6–7 segments · 8–9 inputs/small ·
+       10 primary/alerts · 11–12 cards/lists · 14 hero/palette · 999 pills ─ */
+  --radius-xs: 5px;
+  --radius-seg: 7px;
+  --radius-input: 9px;
+  --radius-btn: 10px;
+  --radius-card: 12px;
+  --radius-hero: 14px;
+  --radius-pill: 999px;
+
+  /* ── typography: IBM Plex Sans/Mono (локальные @font-face — global.css) ─ */
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* scale: 12 help/meta/labels · 12.5 secondary/code · 13 body/rows ·
+     13.5 row titles · 14 inputs/primary · 17–18 screen titles ·
+     20–26 counters · 44 recording timer */
+  --fs-help: 12px;
+  --fs-code: 12.5px;
+  --fs-body: 13px;
+  --fs-title-row: 13.5px;
+  --fs-input: 14px;
+  --fs-screen: 17px;
+  --fs-screen-lg: 18px;
+  --fs-counter: 22px;
+  --fs-counter-lg: 26px;
+  --fs-timer: 44px;
+  --lh-tight: 1.25;
+  --lh-normal: 1.5;
+  --lh-mono: 1.6;
+
+  /* ── shadows (только плавающие слои отбрасывают тень) ────────────────── */
+  --shadow-popover: 0 18px 44px -14px rgb(0 0 0 / 0.35);
+  --shadow-palette: 0 24px 60px -16px rgb(0 0 0 / 0.45);
+  --shadow-toast: 0 10px 30px -10px rgb(0 0 0 / 0.5);
+  --shadow-knob: 0 1px 2px rgb(0 0 0 / 0.3);
+
+  --z-toast: 1000;
+  --z-modal: 900;
+
+  /* ── motion ──────────────────────────────────────────────────────────── */
+  --dur-fast: 140ms;
+  --dur-base: 200ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ══ semantic (light) — сверено с themeVars (light) ══════════════════════ */
+  color-scheme: light;
+
+  --bg: #f7f7f8;
+  --surface: #ffffff;
+  --surface2: #f1f1f3;
+  --input: #ffffff;
+  --code: #fafafa;
+
+  --fg: #18181b;
+  --muted: #52525b; /* AAA 7.7:1 на белом */
+  --subtle: #63636b; /* AA 5.9:1 на белом */
+
+  --border: #e4e4e7;
+  --border-strong: #c9c9cf;
+  --line: #ececef;
+
+  --accent: var(--c-indigo-600);
+  --accent-fg: var(--c-white);
+  --accent-soft: #eef0ff;
+  --accent-line: #c7cbfb;
+  --accent-ink: #3730a3; /* ≈9:1 на --accent-soft */
+
+  --switch-off: #8b8b94;
+
+  --danger: #c81e1e;
+  --danger-ink: #b91c1c;
+  --danger-soft: #fef2f2;
+  --danger-line: #fecaca;
+
+  --success: #047857;
+  --success-ink: #047857;
+  --success-soft: #ecfdf5;
+
+  --warn: #d97706;
+  --warn-ink: #92400e;
+  --warn-soft: #fffbeb;
+
+  --overlay: rgb(24 24 27 / 0.28);
+  --focus-ring: var(--accent);
+
+  /* ── legacy-алиасы (указывают на ближайший v3-токен) ─────────────────── */
+  --bg-subtle: var(--surface2);
+  --fg-muted: var(--muted);
+  --faint: var(--subtle);
+  --fg-caption: var(--muted);
+  --accent-hover: var(--c-indigo-700);
+  --accent-strong: var(--accent-ink);
+  --danger-fg: var(--c-white);
+  --warning: var(--warn);
+  --radius-sm: var(--radius-xs);
+  --radius-field: var(--radius-input);
+  --radius-md: var(--radius-input);
+  --radius-rail: var(--radius-input);
+  --radius-lg: var(--radius-card);
+  --fs-1: var(--fs-help);
+  --fs-2: var(--fs-body);
+  --fs-3: var(--fs-input);
+  --fs-4: var(--fs-screen);
+  --fs-5: var(--fs-counter);
+  --fs-label: var(--fs-help);
+  --ls-label: 0;
+  --fs-mono-input: var(--fs-code);
+  --fs-mono-out: var(--fs-code);
+  --fs-mono-code: var(--fs-code);
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.08);
+  --shadow-2: var(--shadow-popover);
+  --shadow-menu: var(--shadow-popover);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #0f0f12;
+  --surface: #18181c;
+  --surface2: #222227;
+  --input: #121215;
+  --code: #121215;
+
+  --fg: #f4f4f5;
+  --muted: #c4c4cc; /* ≈11:1 на #18181c */
+  --subtle: #a1a1aa; /* ≈7:1 на #18181c */
+
+  --border: #2f2f36;
+  --border-strong: #45454e;
+  --line: #26262c;
+
+  --accent: var(--c-indigo-600);
+  --accent-fg: var(--c-white);
+  --accent-soft: #25244a;
+  --accent-line: #3d3b78;
+  --accent-ink: #b4bcff; /* ≈8:1 на #25244a */
+
+  --switch-off: #6e6e78;
+
+  --danger: #dc2626;
+  --danger-ink: #fca5a5;
+  --danger-soft: rgb(220 38 38 / 0.16);
+  --danger-line: rgb(248 113 113 / 0.35);
+
+  --success: #059669;
+  --success-ink: #6ee7b7;
+  --success-soft: rgb(16 185 129 / 0.14);
+
+  --warn: #d97706;
+  --warn-ink: #fcd34d;
+  --warn-soft: rgb(245 158 11 / 0.14);
+
+  --overlay: rgb(0 0 0 / 0.55);
+  --focus-ring: var(--accent-ink);
+
+  /* legacy dark remaps */
+  --accent-hover: var(--accent-ink);
+  --accent-strong: var(--accent-ink);
+  --danger-fg: #1a0606;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

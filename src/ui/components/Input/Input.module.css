@@ -1,0 +1,35 @@
+/* Input: моноширинное поле значений (редизайн — inputStyle). */
+.root {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-field);
+  background: var(--input);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-input);
+  line-height: var(--lh-normal);
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.root::placeholder {
+  color: var(--faint);
+}
+
+.root:hover:not(:disabled) {
+  border-color: var(--fg-muted);
+}
+
+.root:focus-visible {
+  border-color: var(--accent);
+}
+
+.root:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.root[aria-invalid='true'] {
+  border-color: var(--danger);
+}

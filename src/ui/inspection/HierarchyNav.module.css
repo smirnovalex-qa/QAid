@@ -1,0 +1,226 @@
+/*
+ * Шапка осматриваемого элемента: идентичность + размеры, breadcrumb в одну
+ * прокручиваемую строку и компактный степпер навигации. Пиновка сверху (sticky),
+ * чтобы контекст узла не терялся при прокрутке длинных списков свойств.
+ */
+.root {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+/* 1. Идентичность узла. */
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.selector {
+  display: inline-flex;
+  align-items: baseline;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tag {
+  color: var(--accent);
+  font-weight: 600;
+}
+.id {
+  color: var(--fg);
+  font-weight: 600;
+}
+.cls {
+  color: var(--success);
+}
+.clsMore {
+  margin-left: 2px;
+  color: var(--faint);
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.dims {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-1);
+  color: var(--fg-muted);
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+.copyIcon {
+  width: 14px;
+  height: 14px;
+}
+
+/* 2. Breadcrumb + 3. степпер в одной строке. */
+.navRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.breadcrumb {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.breadcrumb::-webkit-scrollbar {
+  height: 4px;
+}
+.breadcrumb::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-pill);
+}
+
+.crumbItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.crumb {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 2px var(--space-1);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-1);
+  color: var(--fg-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  max-width: 18ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.crumb:hover:not(:disabled) {
+  background: var(--surface2);
+  color: var(--fg);
+}
+.crumb:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+.crumbCurrent {
+  color: var(--fg);
+  font-weight: 600;
+  cursor: default;
+}
+.crumbCurrent:disabled {
+  opacity: 1; /* текущий узел не «погашен», просто не кликается */
+}
+
+.sep {
+  flex: none;
+  color: var(--faint);
+  font-size: var(--fs-1);
+  user-select: none;
+}
+
+/* Степпер: родитель / ребёнок / соседи. */
+.stepper {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.step {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--fg);
+  cursor: pointer;
+}
+.step:hover:not(:disabled) {
+  background: var(--surface2);
+  border-color: var(--faint);
+}
+.step:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+.step:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+/* Соседи: prev · позиция · next в едином блоке. */
+.siblings {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 2px;
+}
+.stepEnd {
+  width: 22px;
+}
+
+.position {
+  min-width: 40px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-1);
+  color: var(--fg-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.chevron {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+.down {
+  transform: none;
+}
+.up {
+  transform: rotate(180deg);
+}
+.left {
+  transform: rotate(90deg);
+}
+.right {
+  transform: rotate(-90deg);
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--fs-1);
+  color: var(--faint);
+}

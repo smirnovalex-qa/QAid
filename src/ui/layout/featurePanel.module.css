@@ -1,0 +1,49 @@
+/* Каркас панели фичи (TASK-008). */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+/* Bare-режим: без карточной обёртки — только вертикальная раскладка. */
+.bareRoot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--fs-4);
+  line-height: var(--lh-tight);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--fs-2);
+  line-height: var(--lh-normal);
+  color: var(--fg-muted);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.output {
+  display: flex;
+  flex-direction: column;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
