@@ -1,0 +1,239 @@
+/* v3 «Осмотр страницы» — сравнение состояний. Семантические токены (tokens.css). */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  color: var(--fg);
+}
+
+.intro {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.meta {
+  margin: 0;
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+.error {
+  margin: 0;
+  font-size: var(--fs-body);
+  color: var(--danger-ink);
+}
+
+/* ── step tiles ───────────────────────────────────────────────────────── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-height: 84px;
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.step:hover {
+  border-color: var(--accent);
+}
+
+.step:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.stepTaken {
+  border-style: solid;
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.stepTop {
+  font-size: var(--fs-help);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.stepTaken .stepTop {
+  color: var(--accent-ink);
+}
+
+.stepLabel {
+  font-size: var(--fs-input);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.stepTaken .stepLabel {
+  color: var(--accent-ink);
+}
+
+.stepMeta {
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+/* ── filter chips ─────────────────────────────────────────────────────── */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* ── diff rows ────────────────────────────────────────────────────────── */
+.list {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 9px var(--space-4);
+  text-align: left;
+  font: inherit;
+  color: var(--fg);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row:hover {
+  background: var(--surface2);
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.mark {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--surface2);
+}
+
+.markAdd {
+  color: var(--success-ink);
+}
+
+.markRemove {
+  color: var(--danger-ink);
+}
+
+.markChange {
+  color: var(--warn-ink);
+}
+
+.rowBody {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.selector {
+  font-family: var(--font-mono);
+  font-size: var(--fs-code);
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.detail {
+  font-family: var(--font-mono);
+  font-size: var(--fs-help);
+  color: var(--muted);
+  word-break: break-all;
+}
+
+/* ── actions ──────────────────────────────────────────────────────────── */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: var(--space-2);
+}
+
+.secondary {
+  height: 40px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background: var(--surface);
+  color: var(--fg);
+  font: inherit;
+  font-size: var(--fs-body);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.secondary:hover {
+  border-color: var(--accent);
+}
+
+.secondary:disabled {
+  color: var(--subtle);
+  cursor: default;
+  border-color: var(--border);
+}
+
+.ghost {
+  height: 40px;
+  padding: 0 var(--space-3);
+  border: none;
+  border-radius: var(--radius-btn);
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--fs-body);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ghost:hover {
+  background: var(--surface2);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

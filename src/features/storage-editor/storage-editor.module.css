@@ -1,0 +1,654 @@
+/* Cookies & storage — редизайн v3. Строка сайта, горизонтально
+   прокручиваемые табы-со-счётчиками, фильтр + «+ Добавить», список-карточка с
+   разворачиваемыми строками, грид снимков и двухшаговая очистка. Один визуальный язык
+   на наших токенах; разделяется с остальными экранами «Данные браузера». */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--fg);
+}
+
+/* ── строка сайта + инлайн-перезагрузка ──────────────────────────────────────── */
+.topRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.siteLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.siteDot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+.siteHost {
+  font-family: var(--font-mono);
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.siteTab {
+  flex: none;
+}
+
+/* ── табы типов (сегментированный трек со счётчиками) ────────────────────────── */
+.typeRow {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+.typePill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 0 12px;
+  height: 34px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  transition:
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.typePill:hover:not(.typePillActive) {
+  color: var(--fg);
+}
+
+.typePillActive {
+  font-weight: 600;
+  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--accent-ink);
+}
+
+.typeCount {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--subtle);
+}
+
+.typeCountActive {
+  color: var(--accent-ink);
+}
+
+/* ── scope-бокс (IndexedDB DB/STORE, Cache buckets) ──────────────────────────── */
+.scopeBox {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 10px;
+}
+
+.scopeRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scopeLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+  flex: none;
+  width: 42px;
+}
+
+.scopeScroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.pill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex: none;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.pillActive {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+/* ── строка фильтра + «+ Добавить» ───────────────────────────────────────────── */
+.filterRow {
+  display: flex;
+  gap: 8px;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  padding: 0 10px;
+  background: var(--input);
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+}
+
+.searchBox:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.searchIcon {
+  flex: none;
+  color: var(--muted);
+}
+
+.filterInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--fg);
+}
+
+/* ── сводка + подсказка области (idb/cache) ──────────────────────────────────── */
+.summaryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.summary {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.scopeHint {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 52%;
+  text-align: right;
+}
+
+/* ── форма добавления ───────────────────────────────────────────────────────── */
+.addForm {
+  border: 1px solid var(--accent);
+  border-radius: 11px;
+  padding: 12px;
+  background: var(--accent-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  display: block;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  padding: 9px 11px;
+  background: var(--input);
+  color: var(--fg);
+  outline: none;
+}
+
+.input:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.area {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 78px;
+  resize: vertical;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  padding: 9px 11px;
+  background: var(--input);
+  color: var(--fg);
+  outline: none;
+  word-break: break-all;
+}
+
+.area:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.formActions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── список-карточка (общий для storage/idb/cache) ───────────────────────────── */
+.cardList {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+.card:not(:last-child) {
+  border-bottom: 1px solid var(--line);
+}
+
+.cardOpen {
+  background: var(--surface2);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 50px;
+  text-align: left;
+  padding: 7px 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--fg);
+}
+
+.cardHead:hover {
+  background: var(--surface2);
+}
+
+.cardMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cardKey {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardPreview {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardSize {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--faint);
+  flex: none;
+}
+
+.chev {
+  flex: none;
+  color: var(--faint);
+  font-size: 10px;
+  width: 12px;
+  text-align: center;
+}
+
+/* ── флаг-теги в строке (HttpOnly, Secure, content-type) ─────────────────────── */
+.flags {
+  display: flex;
+  gap: 4px;
+  flex: none;
+}
+
+.flag {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--surface2);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── бейджи типов/статусов ───────────────────────────────────────────────────── */
+.badge {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex: none;
+  line-height: 1.6;
+}
+
+.badgeStatus {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  border-radius: 5px;
+  padding: 2px 7px;
+}
+
+.badgeString {
+  background: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.badgeJson {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.badgeNumber {
+  background: rgb(13 148 136 / 0.16);
+  color: #0d9488;
+}
+
+.badgeBool {
+  background: rgb(217 119 6 / 0.16);
+  color: #b45309;
+}
+
+.badgeSuccess {
+  background: var(--success-soft);
+  color: var(--success-ink);
+}
+
+.badgeDanger {
+  background: var(--danger-soft);
+  color: var(--danger-ink);
+}
+
+.badgeWarning {
+  background: var(--warn-soft);
+  color: var(--warn-ink);
+}
+
+.badgeNeutral {
+  background: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+/* ── редактор (раскрытая карточка) ───────────────────────────────────────────── */
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 14px 14px;
+}
+
+.editorHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.prettify {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  border-radius: 6px;
+  padding: 3px 9px;
+  cursor: pointer;
+}
+
+/* ── атрибуты cookie (Domain · Path · SameSite · expiry) ─────────────────────── */
+.cookieGrid {
+  display: flex;
+  gap: 8px;
+}
+
+.field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ── cache: мета-таблица + тело ответа ──────────────────────────────────────── */
+.metaTable {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 11px;
+  background: var(--surface);
+}
+
+.metaRow + .metaRow {
+  border-top: 1px solid var(--line);
+}
+
+.metaKey {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.metaVal {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg);
+}
+
+.codeBox {
+  margin: 0;
+  max-height: 180px;
+  overflow: auto;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 9px 11px;
+  background: var(--code, var(--surface2));
+  color: var(--fg);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* ── действия внутри карточки ────────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* ── грид снимков + двухшаговая очистка ──────────────────────────────────────── */
+.snapGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.importBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.importLabel {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.diff {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.clearWarn {
+  margin: -4px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--danger-ink);
+  text-align: center;
+}
+
+/* ── пустое состояние ────────────────────────────────────────────────────────── */
+.empty {
+  padding: 24px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.emptyGlyph {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  color: var(--faint);
+}
+
+.emptyText {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* ── статусные баннеры ───────────────────────────────────────────────────────── */
+.error {
+  margin: 0;
+  color: var(--danger-ink);
+  font-size: 12px;
+}
+
+.report {
+  margin: 0;
+  min-height: 1em;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--danger-line);
+  border-radius: 10px;
+  background: var(--danger-soft);
+}
+
+.confirmActions {
+  display: flex;
+  gap: 8px;
+}
+
+.note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 12px;
+}

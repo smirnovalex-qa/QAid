@@ -1,0 +1,57 @@
+// English strings for the «Decoders» feature (JWT · Base64 · URL · JSON), v3 design.
+const en: Record<string, string> = {
+  'feature.dec.title': 'Decode & format',
+
+  'dec.tabs': 'Decoder type',
+  'dec.tab.jwt': 'JWT',
+  'dec.tab.base64': 'Base64',
+  'dec.tab.url': 'URL',
+  'dec.tab.json': 'JSON',
+
+  'dec.input': 'Paste here',
+  'dec.live': 'Updates as you type',
+  'dec.copy': 'Copy',
+  'dec.useAsInput': 'Use as input',
+  'dec.localNote': 'Everything is decoded on your computer.',
+  'dec.mode': 'Mode',
+  'dec.decode': 'Decode',
+  'dec.encode': 'Encode',
+  'dec.b64.urlsafe': 'URL-safe',
+  'dec.url.whole': 'Whole URL',
+  'dec.json.action': 'Action',
+  'dec.json.format': 'Format',
+  'dec.json.minify': 'Minify',
+  'dec.json.validate': 'Check',
+  'dec.json.indent': 'Indent',
+  'dec.json.spaces': '{n} spaces',
+  'dec.json.valid': '✓ Valid JSON',
+
+  'dec.out.decoded': 'Decoded',
+  'dec.out.encoded': 'Encoded',
+  'dec.out.formatted': 'Formatted',
+  'dec.out.result': 'Result',
+
+  'dec.jwt.noSig': 'The signature is not checked. Don’t trust the contents for security decisions.',
+  'dec.jwt.header': 'Header',
+  'dec.jwt.payload': 'Payload (data)',
+  'dec.jwt.valid': 'Not expired',
+  'dec.jwt.expired': 'Expired',
+  'dec.jwt.notYetValid': 'Not valid yet',
+  'dec.jwt.issued': 'issued {when}',
+  'dec.jwt.expires': 'expires {when}',
+
+  'dec.err.json.title': 'Invalid JSON',
+  'dec.err.json.at': 'Line {line}, column {column} (offset {offset})',
+  'dec.err.url.title': 'Broken escape',
+  'dec.err.url.msg': 'Check the “%” at position {pos}.',
+  'dec.err.decode.title': 'Can’t decode',
+  'dec.err.base64.msg': 'The text has characters that are not Base64.',
+  'dec.err.utf8.msg': 'The result is not valid UTF-8 text.',
+  'dec.err.jwtPart.msg': 'Part of the token is not valid Base64URL/JSON.',
+  'dec.err.notJwt.title': 'Not a JWT',
+  'dec.err.notJwt.msg': 'A token has 3 parts separated by dots.',
+  'dec.err.large.title': 'Too large',
+  'dec.err.large.msg': 'The limit is 5 MB.',
+};
+
+export default en;

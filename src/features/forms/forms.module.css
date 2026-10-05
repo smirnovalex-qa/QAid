@@ -1,0 +1,229 @@
+/*
+ * «Fill & check forms» — v3-дизайн.
+ * Радио-карточки типа данных, основное действие заполнения, блок проверки форм.
+ * Только семантические токены; раскладку/отступы даёт .toolBody оболочки.
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  color: var(--fg);
+}
+
+/* ── строка сайта: зелёная точка + моно-хост + «· current tab» ─────────── */
+.siteLine {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-code);
+  color: var(--muted);
+}
+
+.siteDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  flex: none;
+}
+
+.siteHost {
+  font-family: var(--font-mono);
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── «What data to fill» ───────────────────────────────────────────────── */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.groupLabel {
+  font-size: var(--fs-help);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.radioCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-height: 72px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-hero);
+  background: var(--surface);
+  text-align: left;
+  color: var(--fg);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease);
+}
+
+.radioCard:hover {
+  border-color: var(--accent);
+}
+
+.radioCardOn {
+  border: 2px solid var(--accent);
+  background: var(--accent-soft);
+  /* компенсируем +1px границы, чтобы карточки не «прыгали» */
+  padding: 9px 11px;
+}
+
+.radioCard:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.cardLabel {
+  font-size: var(--fs-title-row);
+  font-weight: 600;
+}
+
+.cardHelp {
+  font-size: var(--fs-help);
+  line-height: 1.4;
+  color: var(--subtle);
+}
+
+/* ── результат заполнения ──────────────────────────────────────────────── */
+.resultSub {
+  margin-top: 4px;
+  font-size: var(--fs-help);
+  color: var(--muted);
+}
+
+/* ── блок «Check forms for problems» ───────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sectionTitle {
+  flex: 1;
+  margin: 0;
+  font-size: var(--fs-input);
+  font-weight: 600;
+}
+
+.issueList {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.issueRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 52px;
+  padding: 7px 14px;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  text-align: left;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.issueRow:last-child {
+  border-bottom: none;
+}
+
+.issueRow:hover {
+  background: var(--surface2);
+}
+
+.issueRow:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dotError {
+  background: var(--danger);
+}
+
+.dotWarn {
+  background: var(--warn);
+}
+
+.issueBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.issueTitle {
+  font-size: var(--fs-body);
+}
+
+.issueSel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-help);
+  color: var(--subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.show {
+  flex: none;
+  font-size: var(--fs-help);
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+
+.note {
+  margin: 0;
+  font-size: var(--fs-code);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ── экспорт отчёта аудита ─────────────────────────────────────────────── */
+.exportRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.exportLabel {
+  font-size: var(--fs-help);
+  color: var(--muted);
+}

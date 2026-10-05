@@ -1,0 +1,324 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.instructions {
+  margin: 0;
+  font-size: var(--fs-2);
+  color: var(--fg-muted);
+}
+
+/* Хинт живого режима (TASK-056): показывается, пока идёт инспекция курсором. */
+.liveHint {
+  margin: 0;
+  font-size: var(--fs-1);
+  color: var(--fg-muted);
+}
+
+/* «Recording»-точка в активном тумблере «Осматриваю…». */
+.recDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-inline-end: var(--space-1);
+  vertical-align: middle;
+  background: currentColor;
+  border-radius: 50%;
+  animation: recPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes recPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recDot {
+    animation: none;
+  }
+}
+
+.error {
+  margin: 0;
+  color: var(--danger);
+  font-size: var(--fs-2);
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.selector {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2);
+  color: var(--fg);
+  word-break: break-all;
+}
+
+.meta {
+  margin: 0;
+  font-size: var(--fs-1);
+  color: var(--fg-muted);
+}
+
+.contrast {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-1);
+}
+
+.ratio {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--fs-help);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.intro {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--fs-help);
+  line-height: var(--lh-normal);
+  color: var(--subtle);
+}
+
+.metaText {
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+.nodeCard {
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.tabBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.copyGroup {
+  padding: 0;
+  font-size: var(--fs-1);
+  color: var(--fg-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.copyGroup:hover {
+  color: var(--fg);
+  text-decoration: underline;
+}
+
+.entries {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  gap: 2px var(--space-3);
+  margin: 0;
+}
+
+.prop {
+  font-family: var(--font-mono);
+  font-size: var(--fs-1);
+  color: var(--fg-muted);
+  word-break: break-all;
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-1);
+  color: var(--fg);
+  word-break: break-all;
+}
+
+.swatch {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 3px);
+  /* Шахматная подложка проступает под полупрозрачными цветами. */
+  background-image:
+    linear-gradient(45deg, var(--bg-subtle) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--bg-subtle) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--bg-subtle) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--bg-subtle) 75%);
+  background-size: 8px 8px;
+  background-position:
+    0 0,
+    0 4px,
+    4px -4px,
+    -4px 0;
+}
+
+.swatchFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--fs-1);
+  color: var(--fg-muted);
+}
+
+/* Значение + подпись-атрибуция «задано правилом …» в одной ячейке (TASK-055). */
+.valueLine {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.setBy {
+  display: block;
+  padding: 0;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-0, 10px);
+  color: var(--fg-muted);
+  text-align: start;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.setBy:hover {
+  color: var(--accent, var(--fg));
+  text-decoration: underline;
+}
+
+/* Секция «Правила / Каскад». */
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.rule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 4px);
+}
+
+.ruleHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.ruleSelector {
+  font-family: var(--font-mono);
+  font-size: var(--fs-1);
+  font-weight: 600;
+  color: var(--fg);
+  word-break: break-all;
+}
+
+.ruleSource {
+  font-size: var(--fs-0, 10px);
+  color: var(--fg-muted);
+  word-break: break-all;
+}
+
+.ruleDecls {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+
+.decl,
+.declOverridden {
+  display: flex;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-1);
+}
+
+/* Перекрытое объявление — зачёркнуто и приглушено (как в DevTools). */
+.declOverridden {
+  color: var(--fg-muted);
+  text-decoration: line-through;
+}
+
+.declProp {
+  flex: none;
+  color: var(--fg-muted);
+}
+
+.declOverridden .declProp {
+  color: inherit;
+}
+
+.declValue {
+  color: var(--fg);
+  word-break: break-all;
+}
+
+.declOverridden .declValue {
+  color: inherit;
+}
+
+.important {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.ruleNotice {
+  margin: var(--space-1) 0 0;
+  font-size: var(--fs-1);
+  color: var(--fg-muted);
+}

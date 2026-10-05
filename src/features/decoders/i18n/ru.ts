@@ -1,0 +1,57 @@
+// Русские строки фичи «Декодеры» (JWT · Base64 · URL · JSON), дизайн v3.
+const ru: Record<string, string> = {
+  'feature.dec.title': 'Декодеры',
+
+  'dec.tabs': 'Тип декодера',
+  'dec.tab.jwt': 'JWT',
+  'dec.tab.base64': 'Base64',
+  'dec.tab.url': 'URL',
+  'dec.tab.json': 'JSON',
+
+  'dec.input': 'Вставьте сюда',
+  'dec.live': 'Обновляется сразу',
+  'dec.copy': 'Копировать',
+  'dec.useAsInput': 'Сделать вводом',
+  'dec.localNote': 'Всё декодируется на вашем компьютере.',
+  'dec.mode': 'Режим',
+  'dec.decode': 'Декодировать',
+  'dec.encode': 'Кодировать',
+  'dec.b64.urlsafe': 'URL-safe',
+  'dec.url.whole': 'Весь URL',
+  'dec.json.action': 'Действие',
+  'dec.json.format': 'Форматировать',
+  'dec.json.minify': 'Сжать',
+  'dec.json.validate': 'Проверить',
+  'dec.json.indent': 'Отступ',
+  'dec.json.spaces': '{n} пробела',
+  'dec.json.valid': '✓ Корректный JSON',
+
+  'dec.out.decoded': 'Декодировано',
+  'dec.out.encoded': 'Закодировано',
+  'dec.out.formatted': 'Результат',
+  'dec.out.result': 'Результат',
+
+  'dec.jwt.noSig': 'Подпись не проверяется. Не полагайтесь на содержимое в вопросах безопасности.',
+  'dec.jwt.header': 'Заголовок',
+  'dec.jwt.payload': 'Данные (payload)',
+  'dec.jwt.valid': 'Не просрочен',
+  'dec.jwt.expired': 'Просрочен',
+  'dec.jwt.notYetValid': 'Ещё не действителен',
+  'dec.jwt.issued': 'выдан {when}',
+  'dec.jwt.expires': 'истекает {when}',
+
+  'dec.err.json.title': 'Некорректный JSON',
+  'dec.err.json.at': 'Строка {line}, столбец {column} (offset {offset})',
+  'dec.err.url.title': 'Битая escape-последовательность',
+  'dec.err.url.msg': 'Проверьте «%» в позиции {pos}.',
+  'dec.err.decode.title': 'Не удалось декодировать',
+  'dec.err.base64.msg': 'В тексте есть символы, которых нет в Base64.',
+  'dec.err.utf8.msg': 'Результат — не корректный UTF-8 текст.',
+  'dec.err.jwtPart.msg': 'Часть токена — не корректный Base64URL/JSON.',
+  'dec.err.notJwt.title': 'Это не JWT',
+  'dec.err.notJwt.msg': 'Токен состоит из 3 частей через точку.',
+  'dec.err.large.title': 'Слишком большой ввод',
+  'dec.err.large.msg': 'Лимит — 5 МБ.',
+};
+
+export default ru;

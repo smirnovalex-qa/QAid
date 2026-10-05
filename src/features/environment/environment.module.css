@@ -1,0 +1,108 @@
+/*
+ * «Device & location» — v3-дизайн.
+ * Строка сайта, сводка-бар активных эмуляций, карточка на канал (switch + текущее
+ * значение + пресет-чипы). Только семантические токены; отступы — от .toolBody.
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  color: var(--fg);
+}
+
+/* ── строка сайта ──────────────────────────────────────────────────────── */
+.siteLine {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-code);
+  color: var(--muted);
+}
+
+.siteDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  flex: none;
+}
+
+.siteHost {
+  font-family: var(--font-mono);
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── сводка-бар активных эмуляций ──────────────────────────────────────── */
+.summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px 14px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-btn);
+}
+
+.summaryText {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-body);
+  font-weight: 500;
+  color: var(--accent-ink);
+}
+
+/* ── карточка канала ───────────────────────────────────────────────────── */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.cardOn {
+  border-color: var(--accent);
+}
+
+/* Строка-переключатель (Toggle plain) внутри карточки — свой padding/высота. */
+.card .channelRow {
+  min-height: 56px;
+  padding: 8px 14px;
+}
+
+/* ── пресет-чипы + примечание канала ───────────────────────────────────── */
+.onBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 0 14px 14px;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.note {
+  margin: 0;
+  font-size: var(--fs-help);
+  line-height: 1.5;
+  color: var(--warn-ink);
+}
+
+/* ── нижнее примечание ─────────────────────────────────────────────────── */
+.footer {
+  margin: 0;
+  font-size: var(--fs-help);
+  line-height: 1.5;
+  color: var(--subtle);
+}
+
+.error {
+  margin: 0;
+}

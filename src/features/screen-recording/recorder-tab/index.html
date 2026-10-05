@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QA Toolbox — recorder</title>
+    <!--
+      Вкладка-рекордер (TASK-037, bugfix 6): видимая страница расширения, где запись С
+      МИКРОФОНОМ ведётся в своём же документе (getUserMedia надёжно работает только там, где
+      сам получен грант — в offscreen грант из другой вкладки НЕ пробрасывается). Один клик
+      «Начать» даёт жест для getDisplayMedia; события идут в side panel по BroadcastChannel.
+      Стили инлайн — страница самодостаточна и не тянет барель приложения.
+    -->
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f5f7fa;
+        --card: #ffffff;
+        --fg: #1a1f2b;
+        --muted: #5b6472;
+        --accent: #0091ff;
+        --accent-fg: #ffffff;
+        --border: #e3e8ef;
+        --danger: #e5484d;
+        --ok: #2e9e5b;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #12151c;
+          --card: #1a1f2b;
+          --fg: #eef1f6;
+          --muted: #9aa4b2;
+          --accent: #3aa6ff;
+          --accent-fg: #06121f;
+          --border: #2a3140;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px;
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          15px/1.5 system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+      }
+      .card {
+        width: 100%;
+        max-width: 460px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 32px 28px;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      }
+      .icon {
+        width: 56px;
+        height: 56px;
+        margin: 0 auto 18px;
+        display: block;
+        color: var(--accent);
+      }
+      h1 {
+        margin: 0 0 10px;
+        font-size: 20px;
+        font-weight: 650;
+      }
+      p {
+        margin: 0 0 22px;
+        color: var(--muted);
+      }
+      button {
+        font: inherit;
+        font-weight: 600;
+        border-radius: 10px;
+        border: 1px solid transparent;
+        padding: 12px 22px;
+        cursor: pointer;
+        transition: filter 0.12s ease;
+      }
+      button:hover {
+        filter: brightness(1.05);
+      }
+      button:active {
+        filter: brightness(0.95);
+      }
+      .primary {
+        background: var(--accent);
+        color: var(--accent-fg);
+      }
+      .danger {
+        background: var(--danger);
+        color: #ffffff;
+      }
+      .status {
+        margin-top: 18px;
+        min-height: 20px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .status.ok {
+        color: var(--ok);
+      }
+      .status.err {
+        color: var(--danger);
+      }
+      .live {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        font-variant-numeric: tabular-nums;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--danger);
+        animation: pulse 1.2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.35;
+        }
+      }
+      .timer {
+        font-size: 26px;
+        font-weight: 650;
+      }
+      .size {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <svg
+        class="icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="2.5" y="6" width="14" height="12" rx="2.5" />
+        <path d="M16.5 10.5 21.5 7.5v9l-5-3z" />
+      </svg>
+
+      <h1 id="title">Screen recording</h1>
+      <p id="body">Click Start to pick a screen or window to record.</p>
+
+      <!-- Фаза настройки: кнопка старта (жест для getDisplayMedia). -->
+      <div id="setup">
+        <button id="start" class="primary" type="button">Start recording</button>
+      </div>
+
+      <!-- Фаза записи: живой индикатор + стоп. -->
+      <div id="live" hidden>
+        <div class="live">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="timer" id="timer">0:00</span>
+        </div>
+        <div class="size" id="size"></div>
+        <button id="stop" class="danger" type="button" style="margin-top: 16px">Stop</button>
+      </div>
+
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </main>
+
+    <script type="module" src="./index.ts"></script>
+  </body>
+</html>

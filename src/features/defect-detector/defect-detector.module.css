@@ -1,0 +1,205 @@
+/* v3 «Осмотр страницы» — детектор дефектов. Семантические токены (tokens.css). */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  color: var(--fg);
+}
+
+.intro {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.note {
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+.error {
+  margin: 0;
+  font-size: var(--fs-body);
+  color: var(--danger-ink);
+}
+
+.metaLine {
+  margin: 0;
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+/* ── meta bar ─────────────────────────────────────────────────────────── */
+.metaBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.meta {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+.exportGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.exportLabel {
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+.ghost {
+  height: 30px;
+  padding: 0 9px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-input);
+  font: inherit;
+  font-size: var(--fs-code);
+  font-weight: 600;
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+
+.ghost:hover {
+  background: var(--accent-soft);
+}
+
+/* ── severity chips ───────────────────────────────────────────────────── */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* ── group cards ──────────────────────────────────────────────────────── */
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.groupHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+}
+
+.dot_error {
+  background: var(--danger);
+}
+
+.dot_warning {
+  background: var(--warn);
+}
+
+.dot_info {
+  background: var(--accent);
+}
+
+.groupTitle {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-code);
+  color: var(--muted);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 42px;
+  padding: var(--space-2) var(--space-4);
+  text-align: left;
+  font: inherit;
+  color: var(--fg);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row:hover {
+  background: var(--surface2);
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.selector {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-code);
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.show {
+  flex: none;
+  font-size: var(--fs-help);
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+
+/* ── «what to check» rule list ────────────────────────────────────────── */
+.ruleList {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.ruleList > * {
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.ruleList > *:last-child {
+  border-bottom: none;
+}

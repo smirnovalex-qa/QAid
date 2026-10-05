@@ -1,0 +1,197 @@
+/*
+ * Раскладка фичи «Редактировать содержимое страницы» (v3 handoff «Network & mocks»).
+ * Только семантические токены (ADR-04): тема переопределяет фон/границы/акцент.
+ */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.intro {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.error {
+  margin: 0;
+  padding: 9px 12px;
+  font-size: var(--fs-code);
+  line-height: 1.45;
+  color: var(--danger-ink);
+  background: var(--danger-soft);
+  border: 1px solid var(--danger-line);
+  border-radius: var(--radius-input);
+}
+
+.status {
+  margin: 0;
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+/* Редактор выбранного элемента — карточка с 2px акцентной рамкой. */
+.editorCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius-card);
+  animation: domPop var(--dur-fast) var(--ease);
+}
+
+.selector {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--accent-ink);
+  overflow-wrap: anywhere;
+}
+
+/* 2×2 радиогруппа действий. */
+.actGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.actBtn {
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-input);
+  background: var(--surface);
+  color: var(--fg);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.actBtn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.actBtnOn {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 64px;
+  resize: vertical;
+  padding: 9px 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--fg);
+  background: var(--input);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-input);
+  outline: none;
+}
+
+.textarea:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.editorActions {
+  display: flex;
+  gap: 8px;
+}
+
+.grow {
+  flex: 1 1 auto;
+}
+
+/* Список активных подмен. */
+.changesHead {
+  margin: 0;
+  font-size: var(--fs-help);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.listCard {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.rowInfo {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rowSelector {
+  font-family: var(--font-mono);
+  font-size: var(--fs-code);
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowOp {
+  font-size: var(--fs-help);
+  color: var(--subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty {
+  margin: 0;
+  padding: 16px 14px;
+  font-size: var(--fs-body);
+  color: var(--muted);
+}
+
+.note {
+  margin: 0;
+  font-size: var(--fs-help);
+  line-height: 1.5;
+  color: var(--subtle);
+}
+
+.clearRow {
+  display: flex;
+}
+
+@keyframes domPop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,659 @@
+/* Session profiles (TASK-047) — v3-дизайн.
+   Строка сайта, основное действие сохранения, карточки профилей с аватаром и
+   инлайн-подтверждением переключения, сейф-переключатель. Только семантические токены. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  color: var(--fg);
+}
+
+/* ── строка сайта ──────────────────────────────────────────────────────────── */
+.siteLine {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-code);
+  color: var(--muted);
+}
+
+.siteDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  flex: none;
+}
+
+.siteHost {
+  font-family: var(--font-mono);
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Подсказка под основным действием. */
+.saveHelp {
+  margin: 0;
+  font-size: var(--fs-help);
+  line-height: 1.5;
+  color: var(--subtle);
+}
+
+.footer {
+  margin: 0;
+  font-size: var(--fs-help);
+  line-height: 1.5;
+  color: var(--subtle);
+}
+
+/* ── шапка области ─────────────────────────────────────────────────────────── */
+.scopeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.scopeLabel {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.scopeHint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60%;
+}
+
+/* ── ряд действий верхнего уровня ──────────────────────────────────────────── */
+.actionsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.modeRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modeLabel {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.modeBtn {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.modeBtnActive {
+  border-color: transparent;
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── inline-форма имени / импорта ─────────────────────────────────────────── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 10px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.input {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  padding: 7px 9px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--input);
+  color: var(--fg);
+}
+
+.area {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  min-height: 96px;
+  padding: 8px 9px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--input);
+  color: var(--fg);
+  resize: vertical;
+}
+
+.formActions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── кнопки ─────────────────────────────────────────────────────────────────── */
+.primaryBtn,
+.ghostBtn,
+.dangerBtn {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+}
+
+.primaryBtn {
+  border-color: transparent;
+  background: var(--accent);
+  color: #fff;
+}
+
+.primaryBtn:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.ghostBtn {
+  background: var(--surface);
+  color: var(--fg);
+}
+
+.dangerBtn {
+  background: var(--surface);
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.primaryBtn:disabled,
+.ghostBtn:disabled,
+.dangerBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── секции ───────────────────────────────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sectionHead {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── карточка профиля ───────────────────────────────────────────────────────── */
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.cardActive {
+  border-color: var(--success);
+}
+
+/* Шапка карточки: аватар + имя/мета + действие (Active | Switch). */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+.avatar {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+}
+
+.avatarActive {
+  color: #fff;
+  background: var(--success);
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardName {
+  font-size: var(--fs-input);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardMeta {
+  font-size: var(--fs-help);
+  color: var(--subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activeBadge {
+  flex: none;
+  font-size: var(--fs-help);
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--success-soft);
+  color: var(--success-ink);
+}
+
+.switchBtn {
+  flex: none;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--radius-input);
+  border: 1px solid var(--accent);
+  background: var(--surface);
+  color: var(--accent-ink);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.switchBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.expandBtn {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--subtle);
+  cursor: pointer;
+  border-radius: var(--radius-input);
+}
+
+.expandBtn:hover {
+  background: var(--surface2);
+}
+
+/* ── инлайн-подтверждение переключения ───────────────────────────────────────── */
+.confirmInline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 14px 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.radioCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  color: var(--fg);
+}
+
+.radioCard:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.radioDot {
+  flex: none;
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--switch-off);
+}
+
+.radioOn .radioDot {
+  border: 5px solid var(--accent);
+}
+
+.radioText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.radioLabel {
+  font-size: var(--fs-body);
+  font-weight: 500;
+}
+
+.radioHelp {
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+.chev {
+  color: var(--faint);
+  font-size: 11px;
+}
+
+.badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 11px 11px;
+  border-top: 1px solid var(--line);
+}
+
+.entryGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.entryGroupHead {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.entryRow {
+  display: flex;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.entryKey {
+  color: var(--muted);
+  flex: none;
+  max-width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.entryVal {
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ── заметки / ошибки / отчёт ───────────────────────────────────────────────── */
+.note {
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin: 0;
+}
+
+.error {
+  font-size: 12px;
+  color: var(--danger);
+  margin: 0;
+}
+
+.report {
+  font-size: 12px;
+  color: var(--muted);
+  min-height: 16px;
+  margin: 0;
+}
+
+.diff {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.scopeWarn {
+  font-size: 11px;
+  color: var(--danger);
+  margin: 0;
+}
+
+/* ── подтверждение (немодальный alertdialog) ────────────────────────────────── */
+.confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--danger);
+  border-radius: 9px;
+  padding: 11px;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── пусто ──────────────────────────────────────────────────────────────────── */
+.empty {
+  text-align: center;
+  padding: 18px 10px;
+  color: var(--faint);
+  font-size: 12px;
+}
+
+/* ── импорт ─────────────────────────────────────────────────────────────────── */
+.importBox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── сейф (at-rest-шифрование, TASK-050) ────────────────────────────────────── */
+.vault {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Переключатель защиты внутри карточки (переопределяет padding Toggle.plain). */
+.card .vaultToggle {
+  padding: 12px 14px;
+}
+
+.vaultRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.vaultBadge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.vaultBadgeOpen {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  border-color: transparent;
+}
+
+.vaultBadgeLocked {
+  background: var(--danger-soft, var(--surface2));
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.autoLockRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.autoLockRow .input {
+  width: 72px;
+}
+
+/* ── поле пароля с показать/скрыть ───────────────────────────────────────────── */
+.pwRow {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+}
+
+.pwInput {
+  flex: 1;
+  min-width: 0;
+}
+
+.pwToggle {
+  flex: none;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 0 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.pwToggle[aria-pressed='true'] {
+  color: var(--accent-strong);
+  border-color: var(--accent);
+}
+
+/* ── индикатор надёжности (полоска + подпись) ────────────────────────────────── */
+.strength {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.strengthBar {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.strengthFill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.15s ease;
+}
+
+.strengthWeak {
+  background: var(--danger);
+}
+
+.strengthFair {
+  background: var(--warning);
+}
+
+.strengthStrong {
+  background: var(--success);
+}
+
+.strengthLabel {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── чекбокс «понимаю, восстановления нет» ──────────────────────────────────── */
+.checkRow {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 11px;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.checkRow input {
+  flex: none;
+  margin-top: 2px;
+}
+
+.hint {
+  font-size: 10px;
+  color: var(--faint);
+}

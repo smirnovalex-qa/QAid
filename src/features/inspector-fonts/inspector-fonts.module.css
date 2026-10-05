@@ -1,0 +1,192 @@
+/* v3 «Осмотр страницы» — инспектор шрифтов. Семантические токены (tokens.css). */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  color: var(--fg);
+}
+
+.intro {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.note {
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+.error {
+  margin: 0;
+  font-size: var(--fs-body);
+  color: var(--danger-ink);
+}
+
+/* ── meta bar ─────────────────────────────────────────────────────────── */
+.metaBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.meta {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+.exportGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.exportLabel {
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+.ghost {
+  height: 30px;
+  padding: 0 9px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-input);
+  font: inherit;
+  font-size: var(--fs-code);
+  font-weight: 600;
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+
+.ghost:hover {
+  background: var(--accent-soft);
+}
+
+.ghost:disabled {
+  color: var(--subtle);
+  cursor: default;
+}
+
+/* ── family cards ─────────────────────────────────────────────────────── */
+.families {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.familyName {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fs-title-row);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sample {
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--fg);
+}
+
+.cardMeta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-help);
+  color: var(--muted);
+  line-height: var(--lh-normal);
+}
+
+.uses {
+  font-size: var(--fs-help);
+  color: var(--subtle);
+}
+
+.useList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+}
+
+.useBtn {
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: var(--fs-help);
+  color: var(--accent-ink);
+  cursor: pointer;
+  text-underline-offset: 2px;
+}
+
+.useBtn:hover {
+  text-decoration: underline;
+}
+
+/* ── element profile ──────────────────────────────────────────────────── */
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.profileTitle {
+  margin: 0;
+  font-size: var(--fs-title-row);
+  font-weight: 600;
+}
+
+.profileGrid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-1) var(--space-3);
+  align-items: baseline;
+}
+
+.profileKey {
+  font-size: var(--fs-help);
+  color: var(--muted);
+}
+
+.profileVal {
+  font-family: var(--font-mono);
+  font-size: var(--fs-code);
+  color: var(--fg);
+  word-break: break-word;
+}
+
+.preview {
+  padding: var(--space-2);
+  border-radius: var(--radius-input);
+  background: var(--surface2);
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--fg);
+}
