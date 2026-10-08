@@ -73,14 +73,15 @@ describe('architecture fitness', () => {
     for (const f of prodFiles) {
       const owner = ownerFeature(f.rel);
       for (const spec of f.imports) {
-        // Разрешены реестр (`@/features/registry`), UI-барель (`@/features`) и
-        // background-барель (`@/features/background`, F6 TASK-046) — это core-точки
-        // агрегации, а не конкретные фичи. Любой другой `@/features/<x>/…` — обращение
-        // к конкретной фиче (запрещено вне неё).
+        // Разрешены реестр (`@/features/registry`), UI-барель (`@/features`),
+        // background-барель (`@/features/background`, F6 TASK-046) и offscreen-барель
+        // (`@/features/offscreen`, ADR-0047) — это core-точки агрегации, а не конкретные
+        // фичи. Любой другой `@/features/<x>/…` — обращение к конкретной фиче
+        // (запрещено вне неё).
         const m = /^@\/features\/([^/]+)/.exec(spec);
         if (!m) continue;
         const target = m[1];
-        if (target === 'registry' || target === 'background') continue;
+        if (target === 'registry' || target === 'background' || target === 'offscreen') continue;
         if (owner && owner === target) continue; // файл внутри своей фичи
         violations.push(`${f.rel} → ${spec}`);
       }
@@ -154,6 +155,14 @@ describe('architecture fitness', () => {
     expect(sw, 'background/index.ts').toBeDefined();
     expect(sw?.imports).toContain('@/features/background');
     expect(sw?.imports).not.toContain('@/features');
+
+    // Offscreen-документ тянет ТОЛЬКО узкий offscreen-барель, а не UI-барель `@/features`
+    // — иначе дескрипторы всех фич + оба i18n (~307 КБ) попали бы в его эфемерный граф,
+    // хотя нужен лишь bootstrap записи экрана (ADR-0047).
+    const offscreen = byRel('offscreen/index.ts');
+    expect(offscreen, 'offscreen/index.ts').toBeDefined();
+    expect(offscreen?.imports).toContain('@/features/offscreen');
+    expect(offscreen?.imports).not.toContain('@/features');
 
     // UI-барель `@/features` не импортирует фоновой код фич (перехватчики/DNR/CDP и т.п.),
     // чтобы граф popup/sidepanel оставался без него.
