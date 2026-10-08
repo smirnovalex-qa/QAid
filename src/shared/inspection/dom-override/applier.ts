@@ -12,6 +12,16 @@
  * записей, поэтому свои мутации в него не попадают. `clear`/teardown полностью
  * восстанавливают DOM. Узлы, которых пользователь не выбирал, не читаются и не пишутся.
  *
+ * Переигрывание по чужим мутациям КОАЛЕСИРУЕТСЯ в один `requestAnimationFrame`: все
+ * пачки мутаций, пришедшие за кадр, схлопываются в одну реконсиляцию, синхронную с
+ * ритмом отрисовки браузера. Иначе на «болтливой» странице (анимации, инкрементальный
+ * рендер, ре-рендеры фреймворка) наблюдатель запускал полный проход (`restoreAll` +
+ * `querySelector` по каждой записи) на КАЖДУЮ доставку мутаций — лишняя работа и
+ * layout-трэшинг. Прямой вызов `apply` реконсилит немедленно (без кадра) — задержка
+ * только у реакции на чужие правки. В фоновой вкладке rAF не тикает: реконсиляция
+ * отложится до возврата фокуса (для косметики это приемлемо — скрытую вкладку никто
+ * не видит, а кадр отработает до первого paint при возврате).
+ *
  * Импорт `./messages` (side-effect) регистрирует zod-контракты `domOverride/*` в
  * реестре content-реалма — иначе роутер не провалидирует входящий запрос.
  */
@@ -36,6 +46,8 @@ let desired: readonly DomOverrideEntry[] = [];
 let applied: AppliedRecord[] = [];
 /** Наблюдатель мутаций (создаётся при первом `apply`, снимается на `clear`). */
 let observer: MutationObserver | null = null;
+/** Хэндл запланированного кадра переигрывания (rAF-коалесинг) или `null`. */
+let replayHandle: number | null = null;
 
 /** Читает текущее значение поля узла как `string | null` (null — пусто/нет атрибута). */
 function readField(el: Element, field: DomField): string | null {
@@ -137,16 +149,36 @@ function withPausedObserver<T>(fn: () => T): T {
   }
 }
 
-/** Создаёт наблюдатель (идемпотентно), переигрывающий подмены по мутациям. */
-function ensureObserver(): void {
-  if (observer !== null) return;
-  observer = new MutationObserver(() => {
-    // Переигрываем желаемый набор; собственные записи идут при отключённом
-    // наблюдателе (см. withPausedObserver), поэтому цикла не возникает.
+/**
+ * Планирует переигрывание в следующем кадре (`requestAnimationFrame`), схлопывая все
+ * мутации кадра в одну реконсиляцию (debounce). Повторные вызовы до кадра
+ * дедуплицируются по `replayHandle`. Собственные записи идут при отключённом
+ * наблюдателе (`withPausedObserver`), поэтому цикла не возникает.
+ */
+function scheduleReplay(): void {
+  if (replayHandle !== null) return;
+  replayHandle = requestAnimationFrame(() => {
+    replayHandle = null;
     withPausedObserver(() => {
       applyDesired();
     });
   });
+}
+
+/** Снимает запланированный кадр переигрывания (если есть) — для `clear`/teardown. */
+function cancelScheduledReplay(): void {
+  if (replayHandle === null) return;
+  cancelAnimationFrame(replayHandle);
+  replayHandle = null;
+}
+
+/** Создаёт наблюдатель (идемпотентно), переигрывающий подмены по мутациям. */
+function ensureObserver(): void {
+  if (observer !== null) return;
+  // Коалесим в один кадр: много пачек мутаций за кадр → одна реконсиляция (см.
+  // заголовок модуля). Прямой синхронный проход тут запускал бы полный
+  // restoreAll + querySelector на каждую доставку мутаций.
+  observer = new MutationObserver(scheduleReplay);
   observeNow();
 }
 
@@ -159,6 +191,7 @@ function apply(req: RequestOf<'domOverride/apply'>): Promise<{ applied: number }
 
 function clear(): Promise<{ ok: true }> {
   desired = [];
+  cancelScheduledReplay(); // снять отложенный кадр — иначе он переиграл бы после очистки
   withPausedObserver(() => {
     restoreAll();
   });
@@ -182,6 +215,7 @@ export const domOverrideHandlers = { apply, clear, list };
  * Экспортируется для тестов (модульное состояние живёт между кейсами) и для teardown.
  */
 export function resetDomOverrideState(): void {
+  cancelScheduledReplay();
   withPausedObserver(() => {
     restoreAll();
   });

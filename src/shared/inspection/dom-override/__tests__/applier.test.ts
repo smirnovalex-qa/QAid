@@ -2,8 +2,18 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { domOverrideHandlers, resetDomOverrideState } from '../applier';
 import type { DomOverrideEntry } from '../types';
 
-/** Ждёт доставки колбэков MutationObserver (микротаск/следующий тик). */
-const tick = (): Promise<void> => new Promise((r) => setTimeout(r, 0));
+/**
+ * Ждёт доставки колбэков MutationObserver И кадра rAF-коалесинга: переигрывание
+ * подмен теперь планируется через `requestAnimationFrame` (debounce, см. applier).
+ * Микротаск доставляет мутацию → наблюдатель ставит кадр → кадр переигрывает;
+ * флаш одного кадра покрывает всю цепочку.
+ */
+const tick = (): Promise<void> =>
+  new Promise((r) => {
+    requestAnimationFrame(() => {
+      r();
+    });
+  });
 
 function entry(over: Partial<DomOverrideEntry> = {}): DomOverrideEntry {
   return {
@@ -127,6 +137,35 @@ describe('MutationObserver: переигрывание с защитой от ц
     expect(document.querySelector('#a')?.textContent).toBe('NEW');
     // Единственная активная подмена — не размножилась (защита от циклов).
     expect((await domOverrideHandlers.list()).selectors).toEqual(['#a']);
+  });
+
+  it('коалесирует всплеск чужих мутаций в ОДИН кадр (debounce через rAF)', async () => {
+    await apply([entry({ selector: '#a', op: { kind: 'replace-text', text: 'NEW' } })]);
+
+    // Считаем запланированные кадры переигрывания. `apply` выше реконсилит синхронно и
+    // кадр не планирует, поэтому обёртку ставим после него. Флаш делаем через исходный
+    // rAF (`realRaf`), чтобы он сам не попал в счётчик.
+    const realRaf = globalThis.requestAnimationFrame;
+    let scheduled = 0;
+    globalThis.requestAnimationFrame = (cb) => {
+      scheduled += 1;
+      return realRaf(cb);
+    };
+    try {
+      const a = document.querySelector<HTMLElement>('#a')!;
+      // Всплеск из 5 чужих мутаций в одном такте — наблюдатель доставит их одной пачкой.
+      for (let i = 0; i < 5; i += 1) a.setAttribute('data-noise', String(i));
+      await new Promise<void>((res) => {
+        realRaf(() => {
+          res();
+        });
+      });
+
+      expect(scheduled).toBe(1); // одна реконсиляция на кадр, а НЕ пять
+      expect(document.querySelector('#a')?.textContent).toBe('NEW'); // подмена восстановлена
+    } finally {
+      globalThis.requestAnimationFrame = realRaf;
+    }
   });
 
   it('после clear наблюдатель снят — внешние правки больше не переигрываются', async () => {
