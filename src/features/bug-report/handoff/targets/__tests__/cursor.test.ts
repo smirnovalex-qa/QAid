@@ -87,46 +87,46 @@ describe('buildCursorFileLink', () => {
   it('POSIX cwd: склеивает абсолютный путь без двойного слэша и точным энкодом', () => {
     const result = buildCursorFileLink({
       cwd: '/home/me/app',
-      relPath: '.qanvil/bug-reports/latest.md',
+      relPath: '.qaid/bug-reports/latest.md',
     });
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.value.url).toBe('cursor://file/home/me/app/.qanvil/bug-reports/latest.md');
+    expect(result.value.url).toBe('cursor://file/home/me/app/.qaid/bug-reports/latest.md');
     expect(result.value.url).not.toContain('//home');
   });
 
   it('POSIX cwd: не дублирует сепаратор при завершающем слэше в cwd', () => {
     const result = buildCursorFileLink({
       cwd: '/home/me/app/',
-      relPath: '.qanvil/bug-reports/latest.md',
+      relPath: '.qaid/bug-reports/latest.md',
     });
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.value.url).toBe('cursor://file/home/me/app/.qanvil/bug-reports/latest.md');
+    expect(result.value.url).toBe('cursor://file/home/me/app/.qaid/bug-reports/latest.md');
   });
 
   it('Windows cwd: нормализует `\\`, добавляет ведущий слэш и сохраняет диск `C:`', () => {
     const result = buildCursorFileLink({
       cwd: 'C:\\Users\\me\\app',
-      relPath: '.qanvil/bug-reports/latest.md',
+      relPath: '.qaid/bug-reports/latest.md',
     });
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.value.url).toBe('cursor://file/C:/Users/me/app/.qanvil/bug-reports/latest.md');
+    expect(result.value.url).toBe('cursor://file/C:/Users/me/app/.qaid/bug-reports/latest.md');
   });
 
   it('энкодит пробелы в пути, слэши оставляет читаемыми', () => {
     const result = buildCursorFileLink({
       cwd: '/home/me/my app',
-      relPath: '.qanvil/latest.md',
+      relPath: '.qaid/latest.md',
     });
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.value.url).toBe('cursor://file/home/me/my%20app/.qanvil/latest.md');
+    expect(result.value.url).toBe('cursor://file/home/me/my%20app/.qaid/latest.md');
   });
 
   it('пустой cwd → ошибка no-cwd', () => {
-    const result = buildCursorFileLink({ cwd: '', relPath: '.qanvil/latest.md' });
+    const result = buildCursorFileLink({ cwd: '', relPath: '.qaid/latest.md' });
     expect(result.ok).toBe(false);
     if (result.ok) return;
     expect(result.error.kind).toBe('no-cwd');
@@ -135,7 +135,7 @@ describe('buildCursorFileLink', () => {
   it('cwd с `..` → ошибка invalid-cwd', () => {
     const result = buildCursorFileLink({
       cwd: '/home/me/../etc',
-      relPath: '.qanvil/latest.md',
+      relPath: '.qaid/latest.md',
     });
     expect(result.ok).toBe(false);
     if (result.ok) return;
@@ -145,7 +145,7 @@ describe('buildCursorFileLink', () => {
   it('UNC-путь → ошибка invalid-cwd', () => {
     const result = buildCursorFileLink({
       cwd: '\\\\server\\share\\app',
-      relPath: '.qanvil/latest.md',
+      relPath: '.qaid/latest.md',
     });
     expect(result.ok).toBe(false);
     if (result.ok) return;

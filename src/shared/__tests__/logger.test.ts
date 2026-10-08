@@ -6,11 +6,11 @@ afterEach(() => {
 });
 
 describe('logger', () => {
-  it('prefixes each level with [qanvil]', () => {
+  it('prefixes each level with [qaid]', () => {
     for (const level of ['debug', 'info', 'warn', 'error'] as const) {
       const spy = vi.spyOn(console, level).mockImplementation(() => undefined);
       logger[level]('msg', 1);
-      expect(spy).toHaveBeenCalledWith('[qanvil]', 'msg', 1);
+      expect(spy).toHaveBeenCalledWith('[qaid]', 'msg', 1);
     }
   });
 

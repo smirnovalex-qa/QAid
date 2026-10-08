@@ -198,7 +198,7 @@ export default {
     'Нужен абсолютный путь (напр. C:\\Users\\me\\webapp или /home/me/webapp), без «..». Обязателен для Cursor.',
   'bugReport.handoff.project.pick': 'Выбрать папку проекта…',
   'bugReport.handoff.project.pickHint':
-    'Выбор папки надёжно работает в side panel — в popup ОС-диалог закрывает окно. Выберите корень репозитория, тогда отчёт ляжет в <repo>/.qanvil/bug-reports/latest.md.',
+    'Выбор папки надёжно работает в side panel — в popup ОС-диалог закрывает окно. Выберите корень репозитория, тогда отчёт ляжет в <repo>/.qaid/bug-reports/latest.md.',
   'bugReport.handoff.project.pickedOn': 'Папка проекта выбрана',
   'bugReport.handoff.project.pickedOff': 'Папка проекта не выбрана',
   'bugReport.handoff.project.forget': 'Забыть папку',

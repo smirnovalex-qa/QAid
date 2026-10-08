@@ -196,7 +196,7 @@ export default {
     'Must be an absolute path (e.g. C:\\Users\\me\\webapp or /home/me/webapp), no “..”. Required for Cursor.',
   'bugReport.handoff.project.pick': 'Choose project folder…',
   'bugReport.handoff.project.pickHint':
-    'Folder picking is reliable in the side panel — in the popup the OS dialog closes the window. Pick your repository root so the report lands at <repo>/.qanvil/bug-reports/latest.md.',
+    'Folder picking is reliable in the side panel — in the popup the OS dialog closes the window. Pick your repository root so the report lands at <repo>/.qaid/bug-reports/latest.md.',
   'bugReport.handoff.project.pickedOn': 'Project folder selected',
   'bugReport.handoff.project.pickedOff': 'No project folder selected',
   'bugReport.handoff.project.forget': 'Forget folder',

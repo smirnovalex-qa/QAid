@@ -28,7 +28,7 @@ type QaManifest = ManifestV3Export & {
  */
 const manifest: QaManifest = {
   manifest_version: 3,
-  name: 'QAnvil',
+  name: 'QAid',
   description:
     'Консолидированный набор QA-инструментов: генераторы, инспектор, storage, декодеры. Локально и приватно.',
   version: toExtensionVersion(pkg.version),
@@ -42,7 +42,7 @@ const manifest: QaManifest = {
   },
   action: {
     default_popup: 'src/popup/index.html',
-    default_title: 'QAnvil',
+    default_title: 'QAid',
     default_icon: {
       '16': 'src/assets/icons/icon-16.png',
       '32': 'src/assets/icons/icon-32.png',

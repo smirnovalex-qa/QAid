@@ -13,7 +13,7 @@ type Catalog = Record<string, string>;
 
 const catalogs: Record<Locale, Catalog> = {
   ru: {
-    'app.title': 'QAnvil',
+    'app.title': 'QAid',
     'theme.toggle': 'Сменить тему',
     'theme.light': 'Светлая тема',
     'theme.dark': 'Тёмная тема',
@@ -51,7 +51,7 @@ const catalogs: Record<Locale, Catalog> = {
     'common.off': 'выкл',
   },
   en: {
-    'app.title': 'QAnvil',
+    'app.title': 'QAid',
     'theme.toggle': 'Toggle theme',
     'theme.light': 'Light theme',
     'theme.dark': 'Dark theme',

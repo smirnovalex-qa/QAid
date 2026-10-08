@@ -30,7 +30,7 @@ export const HANDOFF_PACKAGE_VERSION = 1 as const;
 export const DEEP_LINK_PROMPT_LIMIT = 5000 as const;
 
 /** Относительный путь-каталог, куда FSA-транспорт кладёт артефакты в корне проекта. */
-export const HANDOFF_DIR = '.qanvil/bug-reports' as const;
+export const HANDOFF_DIR = '.qaid/bug-reports' as const;
 
 // ── пакет для агента ───────────────────────────────────────────────────────────
 

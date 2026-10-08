@@ -6,7 +6,7 @@
  * Работает только в document-контексте (popup/side panel), где есть DOM и
  * `window.showDirectoryPicker`. Выбранный `FileSystemDirectoryHandle` переживает
  * перезагрузку расширения: он структурно клонируется в собственный крошечный
- * keyval-стор IndexedDB (`qanvil-handoff` → `handles` → `project-root`). Это
+ * keyval-стор IndexedDB (`qaid-handoff` → `handles` → `project-root`). Это
  * ХРАНИЛИЩЕ РАСШИРЕНИЯ (persist handle), а не инспекция IDB страницы (та живёт в
  * `shared/inspection/idb`).
  *
@@ -50,7 +50,7 @@ interface DirectoryPickerWindow {
 
 // ── keyval-стор для persist handle (крошечная обёртка над IndexedDB) ────────────
 
-const DB_NAME = 'qanvil-handoff';
+const DB_NAME = 'qaid-handoff';
 const STORE_NAME = 'handles';
 const HANDLE_KEY = 'project-root';
 
@@ -256,7 +256,7 @@ export async function writeProjectFiles(pkg: AgentHandoffPackage): Promise<FsWri
   }
 
   try {
-    // Вложенные каталоги из `HANDOFF_DIR` (`.qanvil` → `bug-reports`).
+    // Вложенные каталоги из `HANDOFF_DIR` (`.qaid` → `bug-reports`).
     let dir: FileSystemDirectoryHandle = handle;
     for (const segment of HANDOFF_DIR.split('/')) {
       dir = await dir.getDirectoryHandle(segment, { create: true });

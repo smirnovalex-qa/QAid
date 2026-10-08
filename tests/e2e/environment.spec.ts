@@ -16,7 +16,7 @@ import { withPermissionTimeout } from './fixtures/permission-timeout';
 const TEST_ORIGIN = 'https://qa-e2e-env.test';
 const TEST_URL = `${TEST_ORIGIN}/page`;
 const TEST_HTML = '<!doctype html><html><body><p>environment fixture</p></body></html>';
-const FAKE_UA = 'QAnvil-E2E/1.0 (Emulated UA)';
+const FAKE_UA = 'QAid-E2E/1.0 (Emulated UA)';
 
 async function serviceWorker(context: import('@playwright/test').BrowserContext): Promise<Worker> {
   let [sw] = context.serviceWorkers();

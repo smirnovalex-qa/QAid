@@ -67,7 +67,7 @@ export const MockRuleSetSchema = z.array(MockRuleSchema);
 
 /** Стабильная обёртка набора для экспорта: версия + правила (совместимость вперёд). */
 export const RuleSetFileSchema = z.object({
-  kind: z.literal('qanvil/mock-rules'),
+  kind: z.literal('qaid/mock-rules'),
   version: z.literal(1),
   rules: MockRuleSetSchema,
 });
@@ -85,7 +85,7 @@ export const MockScenarioSchema = z.object({
  * ссылается (чтобы импорт был самодостаточным — задел под шаринг, TASK-029/030).
  */
 export const ScenarioFileSchema = z.object({
-  kind: z.literal('qanvil/mock-scenario'),
+  kind: z.literal('qaid/mock-scenario'),
   version: z.literal(1),
   scenario: MockScenarioSchema,
   rules: MockRuleSetSchema,
@@ -133,7 +133,7 @@ export function parseRuleSet(json: string): ParseResult {
 
 /** Сериализует набор правил в стабильную JSON-обёртку (pretty). */
 export function serializeRuleSet(rules: MockRule[]): string {
-  return JSON.stringify({ kind: 'qanvil/mock-rules', version: 1, rules }, null, 2);
+  return JSON.stringify({ kind: 'qaid/mock-rules', version: 1, rules }, null, 2);
 }
 
 /** Результат разбора импортируемого сценария (сценарий + его правила). */
@@ -141,7 +141,7 @@ export type ParseScenarioResult =
   { ok: true; scenario: MockScenario; rules: MockRule[] } | { ok: false; error: string };
 
 /**
- * Разбирает JSON сценария (обёртка `{kind:'qanvil/mock-scenario', …}`). Любая
+ * Разбирает JSON сценария (обёртка `{kind:'qaid/mock-scenario', …}`). Любая
  * невалидность — `{ ok: false }` с причиной, без исключения (как `parseRuleSet`).
  */
 export function parseScenario(json: string): ParseScenarioResult {
@@ -158,5 +158,5 @@ export function parseScenario(json: string): ParseScenarioResult {
 
 /** Сериализует сценарий вместе с его правилами в стабильную JSON-обёртку (pretty). */
 export function serializeScenario(scenario: MockScenario, rules: MockRule[]): string {
-  return JSON.stringify({ kind: 'qanvil/mock-scenario', version: 1, scenario, rules }, null, 2);
+  return JSON.stringify({ kind: 'qaid/mock-scenario', version: 1, scenario, rules }, null, 2);
 }

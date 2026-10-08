@@ -57,7 +57,7 @@ function permissionsBlock() {
 
 const changes = changelogSection() ?? '_См. CHANGELOG.md._';
 
-const out = `# QAnvil v${version}
+const out = `# QAid v${version}
 
 ## Изменения
 
@@ -68,7 +68,7 @@ ${changes}
 ## Chrome Web Store submission notes
 
 Локально-приватное расширение (Manifest V3): вся обработка — на устройстве, без
-сетевых вызовов в ядре (ADR-0007). Артефакт \`qanvil-${version}.zip\` собран из
+сетевых вызовов в ядре (ADR-0007). Артефакт \`qaid-${version}.zip\` собран из
 \`dist/\` без source maps.
 
 ${permissionsBlock()}

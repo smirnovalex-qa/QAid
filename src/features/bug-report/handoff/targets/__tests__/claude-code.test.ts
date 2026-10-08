@@ -48,7 +48,7 @@ function makePackage(over: Partial<AgentHandoffPackage> = {}): AgentHandoffPacka
   };
 }
 
-const DEFAULT_LATEST = '.qanvil/bug-reports/latest.md';
+const DEFAULT_LATEST = '.qaid/bug-reports/latest.md';
 
 interface ContextOverrides {
   fsAccess: boolean;
@@ -253,7 +253,7 @@ describe('buildClaudeDeepLink (чистый)', () => {
 
 describe('claudeCommand', () => {
   it('формирует портативную по шеллам команду с @-упоминанием файла', () => {
-    expect(claudeCommand(DEFAULT_LATEST)).toBe('claude "@.qanvil/bug-reports/latest.md"');
+    expect(claudeCommand(DEFAULT_LATEST)).toBe('claude "@.qaid/bug-reports/latest.md"');
   });
 });
 
@@ -314,14 +314,14 @@ describe('адресат claude-code — deliver', () => {
     await result.fallbacks[1]?.run();
     expect(copy).toHaveBeenLastCalledWith('# full markdown');
     await result.fallbacks[2]?.run();
-    expect(copy).toHaveBeenLastCalledWith('claude "@.qanvil/bug-reports/latest.md"');
+    expect(copy).toHaveBeenLastCalledWith('claude "@.qaid/bug-reports/latest.md"');
     await result.fallbacks[3]?.run();
-    expect(copy).toHaveBeenLastCalledWith('@.qanvil/bug-reports/latest.md');
+    expect(copy).toHaveBeenLastCalledWith('@.qaid/bug-reports/latest.md');
   });
 
   it('фолбэк команды/пути использует записанный latestPath (FSA)', async () => {
     const copy = vi.fn<HandoffTransports['copyToClipboard']>(() => Promise.resolve(true));
-    const written = '.qanvil/bug-reports/example-bug-20260919120000.md';
+    const written = '.qaid/bug-reports/example-bug-20260919120000.md';
     const write = vi.fn<HandoffTransports['writeProjectFiles']>(() =>
       Promise.resolve({ ok: true, written: [written], latestPath: written }),
     );

@@ -185,7 +185,7 @@ describe('buildDeepLink — отказы (данными)', () => {
 describe('buildDeepLink — гарантия лимита', () => {
   it('усекает длинный промпт по энкоженой длине, сохраняя указатель', () => {
     const limit = 120;
-    const filePointer = '.qanvil/bug-reports/latest.md';
+    const filePointer = '.qaid/bug-reports/latest.md';
     const r = buildDeepLink({
       scheme: 'x',
       prompt: 'A'.repeat(5000),

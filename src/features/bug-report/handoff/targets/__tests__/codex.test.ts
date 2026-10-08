@@ -137,7 +137,7 @@ describe('buildCodexDeepLink', () => {
 describe('codexCommand', () => {
   it('форматирует неинтерактивную команду из указателя на файл', () => {
     expect(codexCommand(`${HANDOFF_DIR}/latest.md`)).toBe(
-      'codex "$(cat .qanvil/bug-reports/latest.md)"',
+      'codex "$(cat .qaid/bug-reports/latest.md)"',
     );
   });
 });
@@ -228,7 +228,7 @@ describe('адресат codex — deliver', () => {
     const ctx = makeContext({ fsAccess: false, copyToClipboard: copy });
     const result = await byId('codex').deliver(ctx);
     await result.fallbacks[0]?.run();
-    expect(copy).toHaveBeenLastCalledWith('codex "$(cat .qanvil/bug-reports/latest.md)"');
+    expect(copy).toHaveBeenLastCalledWith('codex "$(cat .qaid/bug-reports/latest.md)"');
   });
 });
 

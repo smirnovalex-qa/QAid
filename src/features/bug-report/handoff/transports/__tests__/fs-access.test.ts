@@ -216,8 +216,8 @@ describe('writeProjectFiles', () => {
 
     expect(result.ok).toBe(true);
     expect(result.latestPath).toBe(`${HANDOFF_DIR}/latest.md`);
-    // Вложенные каталоги из HANDOFF_DIR (.qanvil → bug-reports).
-    expect(opts.dirCalls).toEqual(['.qanvil', 'bug-reports']);
+    // Вложенные каталоги из HANDOFF_DIR (.qaid → bug-reports).
+    expect(opts.dirCalls).toEqual(['.qaid', 'bug-reports']);
     // Три файла: <slug>-<ts>.md, <slug>-<ts>.json, latest.md.
     expect(opts.written).toEqual([
       { name: 'example-bug-20260919123456.md', contents: '# full markdown' },

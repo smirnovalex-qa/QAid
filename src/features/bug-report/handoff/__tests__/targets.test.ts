@@ -61,7 +61,7 @@ function makeContext(over: ContextOverrides): DeliveryContext {
         Promise.resolve({
           ok: true,
           written: [],
-          latestPath: '.qanvil/bug-reports/latest.md',
+          latestPath: '.qaid/bug-reports/latest.md',
         }),
       ),
     openDeepLink: vi.fn(),
@@ -161,11 +161,11 @@ describe('адресат project-folder', () => {
       Promise.resolve({
         ok: true,
         written: [
-          '.qanvil/bug-reports/example-bug-20260919120000.md',
-          '.qanvil/bug-reports/example-bug-20260919120000.json',
-          '.qanvil/bug-reports/latest.md',
+          '.qaid/bug-reports/example-bug-20260919120000.md',
+          '.qaid/bug-reports/example-bug-20260919120000.json',
+          '.qaid/bug-reports/latest.md',
         ],
-        latestPath: '.qanvil/bug-reports/latest.md',
+        latestPath: '.qaid/bug-reports/latest.md',
       }),
     );
     const copy = vi.fn<HandoffTransports['copyToClipboard']>(() => Promise.resolve(true));
@@ -174,7 +174,7 @@ describe('адресат project-folder', () => {
     expect(write).toHaveBeenCalledTimes(1);
     expect(result.ok).toBe(true);
     expect(result.usedTransport).toBe('fs-access');
-    expect(result.filePath).toBe('.qanvil/bug-reports/latest.md');
+    expect(result.filePath).toBe('.qaid/bug-reports/latest.md');
     expect(result.message).toBe('bugReport.handoff.msg.written');
     expect(result.fallbacks[0]?.label).toBe('bugReport.handoff.fallback.copyPrompt');
     await result.fallbacks[0]?.run();
@@ -185,7 +185,7 @@ describe('адресат project-folder', () => {
     const failure: FsWriteResult = {
       ok: false,
       written: [],
-      latestPath: '.qanvil/bug-reports/latest.md',
+      latestPath: '.qaid/bug-reports/latest.md',
       error: 'bugReport.handoff.fs.denied',
     };
     const write = vi.fn<HandoffTransports['writeProjectFiles']>(() => Promise.resolve(failure));

@@ -106,7 +106,7 @@ export function applyEnvironmentOverrides(config: EnvironmentConfig): void {
     const makeError = (): GeolocationPositionError =>
       ({
         code: g.errorCode,
-        message: 'qanvil: emulated geolocation',
+        message: 'qaid: emulated geolocation',
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
         TIMEOUT: 3,
