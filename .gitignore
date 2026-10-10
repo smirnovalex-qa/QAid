@@ -8,3 +8,6 @@ playwright-report
 test-results
 .env*
 *.zip
+
+# QA-артефакты и отчёты — не тащим в публичный репозиторий
+docs/qa/
