@@ -146,6 +146,13 @@ export function createPanelFrame(opts: CreatePanelFrameOptions): PanelFrameParts
   const iframe = doc.createElement('iframe');
   iframe.src = opts.iframeSrc;
   // `sandbox` НЕ ставим: нужны same-origin+scripts для `chrome.*`/bus (ADR-0053).
+  // Делегируем `clipboard-write` этому фрейму: тело панели — cross-origin
+  // (`chrome-extension://`) к странице, а дефолтный allowlist фичи — `self`, т.е.
+  // без `allow` Async Clipboard API внутри фрейма заблокирован Permissions Policy
+  // (копирование из панели бросает и печатает violation в консоль). Делегирование
+  // работает, т.к. верхний документ сам имеет `clipboard-write`. Least-privilege:
+  // только `clipboard-write` (чтение буфера панели не нужно).
+  iframe.allow = 'clipboard-write';
   iframe.setAttribute('title', opts.title);
   iframe.style.cssText =
     'box-sizing: border-box; display: block; width: 100%; height: 100%; border: 0; background: transparent;';

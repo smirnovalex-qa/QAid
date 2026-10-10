@@ -33,6 +33,14 @@ describe('createPanelFrame', () => {
     expect(f.host.style.position).toBe('fixed');
   });
 
+  it('делегирует clipboard-write фрейму (cross-origin панель — иначе Async Clipboard заблокирован)', () => {
+    const f = make();
+    // Без `allow` дефолтный allowlist `clipboard-write` — `self`, и копирование из
+    // панели (`chrome-extension://` cross-origin к странице) ловит permissions-policy
+    // violation. Делегирование открывает Async Clipboard API внутри фрейма.
+    expect(f.iframe.allow).toBe('clipboard-write');
+  });
+
   it('setPosition пишет transform:translate3d', () => {
     const f = make();
     f.setPosition(120, 48);
