@@ -80,8 +80,16 @@ pnpm package
 
 Собирает прод-версию и создаёт `dist-zip/qaid-<version>.zip` (без
 source maps). Версия берётся из `package.json` (semver → `manifest.version`,
-полный semver — в `version_name`). Права — минимальные (`storage`, `sidePanel`);
-подробности в [docs/PERMISSIONS.md](docs/PERMISSIONS.md).
+полный semver — в `version_name`).
+
+**Права — least-privilege (ADR-0013).** При установке запрашиваются только
+всегда-нужные: `storage`, `sidePanel`, `declarativeNetRequestWithHostAccess`,
+`debugger`, `offscreen` (три последних Chrome запрещает объявлять как optional).
+Видимый install-warning поднимает лишь `debugger` (CDP-режим мока сети); его
+наблюдаемый эффект возникает только под жестом при выборе этого режима. Host-доступ
+(`*://*/*`, `<all_urls>`) и `scripting`/`cookies` — **optional**: запрашиваются
+брокером в рантайме под пользовательским жестом, а не при установке. Полный реестр
+с обоснованием каждого права — [docs/PERMISSIONS.md](docs/PERMISSIONS.md).
 
 ## Структура
 
