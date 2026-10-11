@@ -29,7 +29,7 @@
  *    вызов не резолвится — тоже под бюджетом с мягким пропуском.
  *  Полная сквозная проверка гарантируется на load-unpacked (ADR-0026).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 import { withPermissionTimeout } from './fixtures/permission-timeout';
 
@@ -50,9 +50,11 @@ test('панель профилей сессий рендерится в side pa
   const panel = await openSidePanel();
   // Оболочка редизайна показывает одну активную панель — активируем фичу кликом
   // по кнопке рельса (aria-label = заголовок фичи).
-  await panel.getByRole('button', { name: /Профили сессий|Session profiles/ }).click();
-  // Контрол захвата профиля виден без каких-либо прав.
-  await expect(panel.getByRole('button', { name: /Захватить|Capture/ }).first()).toBeVisible();
+  await openTool(panel, 'session-profiles');
+  // Контрол сохранения профиля виден без каких-либо прав.
+  await expect(
+    panel.getByRole('button', { name: /Сохранить текущий вход|Save current login/ }).first(),
+  ).toBeVisible();
 });
 
 test('hot-swap применяет целевое состояние к странице', async ({ context, openSidePanel }) => {
@@ -165,8 +167,14 @@ test('hot-swap применяет целевое состояние к стра�
 
   // Обязательная перезагрузка вкладки — тот же сейм платформы, что оборачивает
   // `chrome.tabs.reload` в фиче hot-swap'а. Под бюджетом на случай блока диалогом.
+  // `chrome.tabs.reload` из SW не дожидается загрузки — ждём событие `load` страницы,
+  // иначе `page.evaluate` ниже ловит момент навигации («execution context destroyed»).
   const reloadRes = await withPermissionTimeout(
-    () => sw.evaluate((id: number) => chrome.tabs.reload(id), realTabId).then(() => undefined),
+    () =>
+      Promise.all([
+        page.waitForEvent('load'),
+        sw.evaluate((id: number) => chrome.tabs.reload(id), realTabId),
+      ]).then(() => undefined),
     { label: 'chrome.tabs.reload' },
   );
   test.skip(!reloadRes.ok, reloadRes.reason ?? '');

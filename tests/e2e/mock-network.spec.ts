@@ -9,7 +9,7 @@
  *     сетевой ответ. Требует выданных optional-прав; где грант host недоступен без
  *     нативного диалога — мягкий пропуск (полный e2e — на load-unpacked, ADR-0020/0022).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 
 const TEST_ORIGIN = 'https://qa-e2e-mock.test';
@@ -25,9 +25,9 @@ async function serviceWorker(context: import('@playwright/test').BrowserContext)
 
 test('панель мока сети рендерится в side panel', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Мок сети|Network mock/ }).click();
+  await openTool(panel, 'mock-network');
   await expect(
-    panel.getByRole('button', { name: /Включить перехват|Enable interception/ }),
+    panel.getByRole('switch', { name: /Перехватывать запросы|Intercept requests/ }),
   ).toBeVisible();
 });
 

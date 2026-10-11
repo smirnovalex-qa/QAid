@@ -11,7 +11,7 @@
  *     content-проводки; там, где грант host недоступен без нативного диалога или
  *     content-бандл ещё без forms-проводки, тест мягко пропускается (см. PROGRESS).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 
 const TEST_ORIGIN = 'https://qa-e2e-forms.test';
@@ -42,7 +42,7 @@ test('панель форм рендерится в side panel', async ({ openSi
   const panel = await openSidePanel();
   // Оболочка редизайна показывает одну активную панель — активируем формы кликом
   // по кнопке рельса (aria-label = заголовок фичи).
-  await panel.getByRole('button', { name: /Формы|Forms/ }).click();
+  await openTool(panel, 'forms');
   await expect(panel.getByRole('button', { name: /Заполнить|Fill/ })).toBeVisible();
 });
 

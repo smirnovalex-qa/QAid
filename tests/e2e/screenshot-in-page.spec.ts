@@ -14,7 +14,7 @@
  * (`shared/inspection/screenshot/draw` + `region`); тулбар живёт в ЗАКРЫТОМ Shadow-DOM
  * и недоступен драйверу, поэтому финальный экспорт из UI здесь не автоматизируется.
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 
 const TEST_ORIGIN = 'https://qa-e2e-screenshot-inpage.test';
 const TEST_URL = `${TEST_ORIGIN}/page`;
@@ -47,10 +47,9 @@ async function grant(panel: import('@playwright/test').Page): Promise<boolean> {
 
 test('«Редактировать на странице» рендерится в side panel', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Скриншот|Screenshot/ }).click();
-  await expect(
-    panel.getByRole('button', { name: /Редактировать на странице|Edit on page/ }),
-  ).toBeVisible();
+  await openTool(panel, 'screenshot');
+  // v3 Capture: выбор «Видимая область» запускает in-page поток («заморозка экрана»).
+  await expect(panel.getByRole('button', { name: /Видимая область|Visible area/ })).toBeVisible();
 });
 
 test('best-effort: запуск in-page замораживает вьюпорт и принимает выделение', async ({
@@ -64,13 +63,14 @@ test('best-effort: запуск in-page замораживает вьюпорт 
   await page.goto(TEST_URL);
 
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Скриншот|Screenshot/ }).click();
+  await openTool(panel, 'screenshot');
 
   const granted = await grant(panel);
   test.skip(!granted, 'optional-права не выданы в этой среде — ручная проверка (load-unpacked)');
 
   await page.bringToFront();
-  await panel.getByRole('button', { name: /Редактировать на странице|Edit on page/ }).click();
+  // «Видимая область» = вход в in-page поток (заморозка кадра + аннотирование на странице).
+  await panel.getByRole('button', { name: /Видимая область|Visible area/ }).click();
 
   // Оверлей-хост появляется на странице (закрытый shadow внутри — драйверу не виден).
   const hostAppeared = await page

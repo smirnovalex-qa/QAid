@@ -15,7 +15,7 @@
  *  3. Неверный пароль отклоняется (verifier-canary) и сейф остаётся заблокированным.
  *  4. Верный пароль снова разблокирует сейф.
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 
 const PW = 'correct horse battery staple';
 
@@ -24,10 +24,10 @@ test('жизненный цикл сейфа: включить → lock → не
 }) => {
   const panel = await openSidePanel();
   // Активируем фичу кликом по кнопке рельса (aria-label = заголовок фичи).
-  await panel.getByRole('button', { name: /Профили сессий|Session profiles/ }).click();
+  await openTool(panel, 'session-profiles');
 
-  // 1. Включаем защиту мастер-паролем.
-  await panel.getByTestId('sp-vault-enable').click();
+  // 1. Включаем защиту мастер-паролем (тумблер «Защитить паролем» открывает форму).
+  await panel.getByRole('switch', { name: /Защитить паролем|Protect with a password/ }).click();
   await panel
     .getByTestId('sp-vault-enable-form')
     .getByLabel(/Мастер-пароль|Master password/)
@@ -37,10 +37,8 @@ test('жизненный цикл сейфа: включить → lock → не
   await panel.getByTestId('sp-vault-understand').check();
   await panel.getByTestId('sp-vault-enable-submit').click();
 
-  // Статус «разблокировано» (ключ в памяти, сейф создан).
-  await expect(panel.getByTestId('sp-vault-status')).toHaveText(/Разблокировано|Unlocked/, {
-    timeout: 15000,
-  });
+  // Сейф разблокирован (ключ в памяти): доступна кнопка «Заблокировать».
+  await expect(panel.getByTestId('sp-vault-lock')).toBeVisible({ timeout: 15000 });
 
   // 2. Блокируем — ключ из памяти уходит, появляется экран разблокировки.
   await panel.getByTestId('sp-vault-lock').click();
@@ -52,10 +50,8 @@ test('жизненный цикл сейфа: включить → lock → не
   await expect(panel.getByTestId('sp-unlock-error')).toHaveText(/Неверный пароль|Wrong password/);
   await expect(panel.getByTestId('sp-unlock-form')).toBeVisible();
 
-  // 4. Верный пароль → снова разблокировано.
+  // 4. Верный пароль → снова разблокировано (кнопка «Заблокировать» вернулась).
   await panel.getByTestId('sp-unlock-input').fill(PW);
   await panel.getByTestId('sp-unlock-submit').click();
-  await expect(panel.getByTestId('sp-vault-status')).toHaveText(/Разблокировано|Unlocked/, {
-    timeout: 15000,
-  });
+  await expect(panel.getByTestId('sp-vault-lock')).toBeVisible({ timeout: 15000 });
 });

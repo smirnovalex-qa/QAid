@@ -10,7 +10,7 @@
  *     при отказе/таймауте тест мягко пропускается (полный e2e — на load-unpacked),
  *     как в эталонном инспекторе (см. `inspection.spec.ts`, ADR-0020/0022).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 
 const TEST_ORIGIN = 'https://qa-palette-e2e.test';
 const TEST_URL = `${TEST_ORIGIN}/page`;
@@ -23,7 +23,7 @@ const TEST_HTML =
 /** Активирует панель палитры кликом по её кнопке рельса (оболочка редизайна показывает
  *  одну активную панель; aria-label кнопки рельса = заголовок фичи). */
 async function openPalette(panel: import('@playwright/test').Page): Promise<void> {
-  await panel.getByRole('button', { name: /Палитра цветов|Color palette/ }).click();
+  await openTool(panel, 'inspector-palette');
 }
 
 test('палитра цветов рендерится в side panel', async ({ openSidePanel }) => {

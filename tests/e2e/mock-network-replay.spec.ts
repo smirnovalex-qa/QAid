@@ -10,20 +10,23 @@
  *     из service worker) — мягкий пропуск (полный e2e — на load-unpacked,
  *     ADR-0020/0022), как в `mock-network.spec.ts`.
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 
 const TEST_ORIGIN = 'https://qa-e2e-replay.test';
 const TEST_URL = `${TEST_ORIGIN}/page`;
 const API_URL = `${TEST_ORIGIN}/api/echo`;
 const TEST_HTML = '<!doctype html><html><body><p>replay fixture</p></body></html>';
 
-test('вкладка Replay рендерится в панели мока', async ({ openSidePanel }) => {
+test('панель мока рендерит список запросов — точку входа replay', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Мок сети|Network mock/ }).click();
-  await panel.getByRole('tab', { name: /Replay/ }).click();
-  // Кнопка отправки и «Copy as cURL» — маркеры редактора replay.
-  await expect(panel.getByRole('button', { name: /Отправить|Send/ })).toBeVisible();
-  await expect(panel.getByRole('button', { name: /Copy as cURL/ })).toBeVisible();
+  await openTool(panel, 'mock-network');
+  // В оболочке v3 отдельной вкладки «Replay» нет: replay живёт в действиях над
+  // пойманным запросом («Send again» / «Copy cURL») на вкладке «Запросы». Проверяем,
+  // что эта поверхность рендерится (её empty-state виден без перехвата/прав).
+  await expect(panel.getByRole('tab', { name: /Запросы|Requests/ })).toBeVisible();
+  await expect(
+    panel.getByText(/Включите перехват, чтобы видеть запросы|Turn on interception to see requests/),
+  ).toBeVisible();
 });
 
 test('replay с правкой заголовка/тела возвращает ответ фикстур-сервера', async ({
@@ -99,7 +102,13 @@ test('replay с правкой заголовка/тела возвращает 
     'sender-fetch из SW недоступен/не перехвачен в этой среде — ручная проверка (load-unpacked)',
   );
 
-  const body = reply?.payload?.response?.body ?? '';
-  expect(body).toContain('"echoHeader":"edited"');
-  expect(body).toContain('"edited":true');
+  // Эхо-сервер отражает заголовок и тело: доказываем, что правки редактора реально
+  // ушли в запрос из контекста расширения. Тело приходит как экранированная JSON-строка
+  // внутри ответа, поэтому разбираем ответ, а не ищем подстроку «вслепую».
+  const parsed = JSON.parse(reply?.payload?.response?.body ?? '{}') as {
+    echoHeader?: string | null;
+    echoBody?: string | null;
+  };
+  expect(parsed.echoHeader).toBe('edited');
+  expect(parsed.echoBody).toBe('{"edited":true}');
 });

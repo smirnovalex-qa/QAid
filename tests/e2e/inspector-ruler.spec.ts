@@ -16,7 +16,7 @@
  * `registerInspector(RULER_INSPECTOR_ID, …)`) тесты закономерно не проходят —
  * фича/сборщик ещё не в бандле. Спека написана корректно и «зазеленеет» после интеграции.
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { BrowserContext, Page, Worker } from '@playwright/test';
 
 const TEST_ORIGIN = 'https://qa-ruler-e2e.test';
@@ -67,12 +67,12 @@ async function pickElement(
 
 test('линейка рендерится в side panel', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  // Оболочка редизайна показывает одну активную панель — активируем линейку кликом
-  // по кнопке рельса (aria-label = заголовок фичи). В теле активной панели (режим ab
-  // по умолчанию) — кнопки выбора A/B.
-  await panel.getByRole('button', { name: /Линейка|Ruler/ }).click();
-  await expect(panel.getByRole('button', { name: /Выбрать A|Pick A/ })).toBeVisible();
-  await expect(panel.getByRole('button', { name: /Выбрать B|Pick B/ })).toBeVisible();
+  // Оболочка v3 открывает инструмент по data-tool. В теле панели (режим «Два
+  // элемента» по умолчанию) — кнопка старта измерения.
+  await openTool(panel, 'inspector-ruler');
+  await expect(
+    panel.getByRole('button', { name: /Начать измерение|Start measuring/ }),
+  ).toBeVisible();
 });
 
 test('измерение между двумя элементами даёт зазор 50px', async ({ context, openSidePanel }) => {

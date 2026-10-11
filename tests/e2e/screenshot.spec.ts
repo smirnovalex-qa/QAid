@@ -10,7 +10,7 @@
  *     Где грант host недоступен без нативного диалога, тест мягко пропускается
  *     (см. PROGRESS/ADR-0020/ADR-0022) — запуск не требует живого браузера.
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 
 const TEST_ORIGIN = 'https://qa-e2e-screenshot.test';
@@ -52,8 +52,8 @@ async function grant(panel: import('@playwright/test').Page): Promise<boolean> {
 
 test('screenshot рендерится в side panel', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Скриншот|Screenshot/ }).click();
-  await expect(panel.getByRole('button', { name: /^Снять$|^Capture$/ })).toBeVisible();
+  await openTool(panel, 'screenshot');
+  await expect(panel.getByRole('button', { name: /Видимая область|Visible area/ })).toBeVisible();
 });
 
 test('best-effort: захват видимой области возвращает непустой PNG', async ({

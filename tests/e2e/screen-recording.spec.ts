@@ -14,13 +14,15 @@
  * headless-CI без флагов фейкового устройства и живой поверхности. Проверяется вручную
  * на load-unpacked (см. ADR-0045).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 
 test('запись экрана рендерится в side panel', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Запись экрана|Screen recording/ }).click();
+  await openTool(panel, 'screen-recording');
   // Кнопка старта — стабильный маркер отрисовки панели (метка задана фичей).
-  await expect(panel.getByRole('button', { name: /Начать запись|Start recording/ })).toBeVisible();
+  await expect(
+    panel.getByRole('button', { name: /Выбрать, что записывать|Choose what to record/ }),
+  ).toBeVisible();
 });
 
 test('best-effort: MediaRecorder даёт непустой WebM (примитив записи)', async ({

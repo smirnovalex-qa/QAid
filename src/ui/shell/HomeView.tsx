@@ -62,6 +62,7 @@ export function HomeView(props: HomeViewProps): JSX.Element {
                 key={id}
                 type="button"
                 role="option"
+                data-tool={id}
                 aria-selected={i === 0}
                 class={cn(styles.resultRow, i === 0 && styles.resultFirst)}
                 onClick={() => {
@@ -96,6 +97,7 @@ export function HomeView(props: HomeViewProps): JSX.Element {
                     <button
                       key={id}
                       type="button"
+                      data-tool={id}
                       class={styles.activeRow}
                       onClick={() => {
                         open(id);
@@ -127,6 +129,7 @@ export function HomeView(props: HomeViewProps): JSX.Element {
                   <button
                     key={id}
                     type="button"
+                    data-tool={id}
                     class={styles.pinCard}
                     onClick={() => {
                       open(id);
@@ -153,6 +156,7 @@ export function HomeView(props: HomeViewProps): JSX.Element {
                     <button
                       key={tool.id}
                       type="button"
+                      data-tool={tool.id}
                       class={styles.catRow}
                       onClick={() => {
                         open(tool.id);

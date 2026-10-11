@@ -11,7 +11,7 @@
  *     путей). Право `debugger` — install-time (Chrome не допускает optional), поэтому
  *     отдельного гранта под жестом не нужно; opt-in обеспечивает сам attach.
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 
 const TEST_ORIGIN = 'https://qa-e2e-mock-cdp.test';
@@ -27,10 +27,12 @@ async function serviceWorker(context: import('@playwright/test').BrowserContext)
 
 test('панель мока показывает сегмент стратегии и заметку CDP', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Мок сети|Network mock/ }).click();
+  await openTool(panel, 'mock-network');
 
-  // Переключаем стратегию на CDP — появляется честная заметка про баннер отладки.
-  await panel.getByRole('radio', { name: /CDP/ }).click();
+  // В оболочке v3 строгий (CDP) режим — тумблер в табе «Сценарии». Включаем его —
+  // появляется честная заметка про баннер отладки.
+  await panel.getByRole('tab', { name: /Сценарии|Scenarios/ }).click();
+  await panel.getByRole('switch', { name: /Строгий режим|Strict mode/ }).click();
   await expect(panel.getByText(/баннер|banner/i)).toBeVisible();
 });
 

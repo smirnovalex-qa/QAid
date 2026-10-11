@@ -12,7 +12,7 @@
  *     Требует выданных optional-прав; где грант host недоступен без нативного диалога,
  *     тест мягко пропускается (см. PROGRESS/ADR-0020/ADR-0022).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 
 const TEST_ORIGIN = 'https://qa-e2e-defects.test';
@@ -48,9 +48,8 @@ async function serviceWorker(context: import('@playwright/test').BrowserContext)
 
 test('детектор дефектов рендерится в side panel', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  // Оболочка редизайна показывает ОДНУ активную панель — активируем инспектор кликом
-  // по кнопке рельса (её aria-label = заголовок фичи), затем скоупим по метке панели.
-  await panel.getByRole('button', { name: /Детектор дефектов|Defect detector/ }).click();
+  // Оболочка v3 (Home → Tool) открывает инструмент по стабильному хуку data-tool.
+  await openTool(panel, 'defect-detector');
   await expect(panel.getByRole('button', { name: /Сканировать страницу|Scan page/ })).toBeVisible();
 });
 

@@ -11,7 +11,7 @@
  *     без нативного диалога (или сборщик ещё не подключён оркестратором), тест
  *     мягко пропускается — полный e2e подтверждается на Load unpacked.
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 
 const TEST_ORIGIN = 'https://qa-fonts-e2e.test';
@@ -39,7 +39,7 @@ test('инспектор шрифтов рендерится в side panel', asy
   const panel = await openSidePanel();
   // Оболочка редизайна рендерит одну активную панель — активируем инспектор кликом
   // по кнопке рельса (aria-label = заголовок фичи), затем в её теле — «Сканировать».
-  await panel.getByRole('button', { name: /Инспектор шрифтов|Font inspector/ }).click();
+  await openTool(panel, 'inspector-fonts');
   await expect(panel.getByRole('button', { name: /Сканировать страницу|Scan page/ })).toBeVisible();
 });
 

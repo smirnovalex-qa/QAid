@@ -11,7 +11,7 @@
  *     недоступен без нативного диалога, тест мягко пропускается — полный e2e инъекции
  *     подтверждается на load-unpacked (см. PROGRESS/ADR-0020/ADR-0022).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 
 const TEST_ORIGIN = 'https://qa-e2e-contrast.test';
@@ -34,7 +34,7 @@ test('инспектор контраста рендерится в side panel',
   const panel = await openSidePanel();
   // Оболочка редизайна показывает ОДНУ активную панель — активируем инспектор кликом
   // по кнопке рельса (её aria-label = заголовок фичи), затем скоупим по метке панели.
-  await panel.getByRole('button', { name: /Контраст WCAG|WCAG contrast/ }).click();
+  await openTool(panel, 'inspector-contrast');
   await expect(panel.getByRole('button', { name: /Сканировать страницу|Scan page/ })).toBeVisible();
 });
 

@@ -9,7 +9,7 @@
  *     нативного диалога — мягкий пропуск с ограниченным бюджетом (native dialog не
  *     подвешивает тест до 30s). Полный e2e подтверждается на load-unpacked.
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 import { withPermissionTimeout } from './fixtures/permission-timeout';
 
@@ -26,8 +26,8 @@ async function serviceWorker(context: import('@playwright/test').BrowserContext)
 
 test('панель эмуляции рендерится в side panel', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Эмуляция окружения|Environment emulation/ }).click();
-  await expect(panel.getByTestId('env-toggle')).toBeVisible();
+  await openTool(panel, 'environment');
+  await expect(panel.getByTestId('environment-panel')).toBeVisible();
 });
 
 // Регрессия-гард: Chrome ЗАПРЕЩАЕТ `declarativeNetRequest*` в `optional_permissions`
@@ -63,12 +63,9 @@ test('подмена UA меняет заголовок запроса и naviga
   context,
   openSidePanel,
 }) => {
-  // Фиксируем UA последнего запроса к фикстуре (сервер не нужен — перехват Playwright).
-  let lastUserAgent = '';
-  await context.route(`${TEST_ORIGIN}/**`, (route) => {
-    lastUserAgent = route.request().headers()['user-agent'] ?? '';
-    return route.fulfill({ contentType: 'text/html', body: TEST_HTML });
-  });
+  await context.route(`${TEST_ORIGIN}/**`, (route) =>
+    route.fulfill({ contentType: 'text/html', body: TEST_HTML }),
+  );
   const page = await context.newPage();
   await page.goto(TEST_URL);
 
@@ -156,10 +153,18 @@ test('подмена UA меняет заголовок запроса и naviga
   );
   expect(uaRes.value).toBe(FAKE_UA);
 
-  // Перезагрузка: DNR session-rule подменяет заголовок запроса `User-Agent` (тоже под бюджетом).
-  const reloadRes = await withPermissionTimeout(() => page.reload().then(() => undefined), {
-    label: 'page.reload',
-  });
-  test.skip(!reloadRes.ok, reloadRes.reason ?? '');
-  expect(lastUserAgent).toBe(FAKE_UA);
+  // Вторая плоскость подмены — DNR session-rule на заголовок запроса `User-Agent`.
+  // Playwright `route.fulfill` обслуживает запрос В ОБХОД сетевого слоя, где DNR правит
+  // заголовки, поэтому фактический заголовок через route не наблюдаем (сквозная проверка
+  // заголовка — на load-unpacked, ADR-0026). В CI детерминированно проверяем, что фича
+  // УСТАНОВИЛА корректное session-rule подмены UA для этой вкладки.
+  const ruleInstalled = await sw.evaluate(async (ua: string) => {
+    const rules = await chrome.declarativeNetRequest.getSessionRules();
+    return rules.some((r) =>
+      (r.action?.requestHeaders ?? []).some(
+        (h) => h.header?.toLowerCase() === 'user-agent' && h.operation === 'set' && h.value === ua,
+      ),
+    );
+  }, FAKE_UA);
+  expect(ruleInstalled).toBe(true);
 });

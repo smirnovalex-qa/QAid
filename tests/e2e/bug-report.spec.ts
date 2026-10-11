@@ -9,7 +9,7 @@
  *     optional-прав; где грант host недоступен без нативного диалога — мягкий пропуск
  *     с ограниченным бюджетом (полный e2e — на load-unpacked, ADR-0020/0022).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import { withPermissionTimeout } from './fixtures/permission-timeout';
 import type { Worker } from '@playwright/test';
 
@@ -26,9 +26,9 @@ async function serviceWorker(context: import('@playwright/test').BrowserContext)
 
 test('панель экспорта состояния бага рендерится в side panel', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Экспорт состояния бага|Bug-state export/ }).click();
+  await openTool(panel, 'bug-report');
   await expect(
-    panel.getByRole('button', { name: /Собрать состояние бага|Capture bug state/ }),
+    panel.getByRole('button', { name: /Начать запись бага|Start bug capture/ }),
   ).toBeVisible();
 });
 

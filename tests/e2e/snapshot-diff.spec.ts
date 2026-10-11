@@ -11,7 +11,7 @@
  *     Требует выданных optional-прав; где грант host недоступен без нативного
  *     диалога, тест мягко пропускается (см. PROGRESS/ADR-0020/ADR-0022).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 
 const TEST_ORIGIN = 'https://qa-e2e-snapshot.test';
@@ -75,8 +75,8 @@ async function scan(sw: Worker, tabId: number, correlationId: string): Promise<S
 
 test('snapshot-diff рендерится в side panel', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Снимки DOM|DOM snapshots/ }).click();
-  await expect(panel.getByRole('button', { name: /Снять A|Capture A/ })).toBeVisible();
+  await openTool(panel, 'snapshot-diff');
+  await expect(panel.getByRole('button', { name: /Шаг 1|Step 1/ })).toBeVisible();
 });
 
 test('снимок A → мутация → снимок B → диф показывает изменение', async ({

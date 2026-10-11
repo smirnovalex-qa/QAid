@@ -11,7 +11,7 @@
  *     optional-прав; где грант host недоступен без нативного диалога — мягкий пропуск
  *     через бюджет `withPermissionTimeout` (полный e2e — на load-unpacked, ADR-0020/0022).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import { withPermissionTimeout } from './fixtures/permission-timeout';
 import type { Worker } from '@playwright/test';
 
@@ -28,7 +28,7 @@ async function serviceWorker(context: import('@playwright/test').BrowserContext)
 
 test('панель DOM-подмены рендерится в side panel', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /DOM-подмена|DOM override/ }).click();
+  await openTool(panel, 'dom-override');
   await expect(panel.getByRole('button', { name: /Выбрать элемент|Pick element/ })).toBeVisible();
 });
 

@@ -12,7 +12,7 @@
  *     диалога, тест мягко пропускается — e2e-инъекция подтверждается на Load
  *     unpacked (см. PROGRESS/ADR-0020/ADR-0022).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 import { withPermissionTimeout } from './fixtures/permission-timeout';
 
@@ -36,7 +36,7 @@ test('инспектор рендерится в side panel', async ({ openSideP
   const panel = await openSidePanel();
   // Оболочка редизайна показывает одну активную панель — активируем инспектор элемента
   // кликом по кнопке рельса (aria-label = заголовок фичи).
-  await panel.getByRole('button', { name: /Инспектор элемента|Element inspector/ }).click();
+  await openTool(panel, 'inspector-probe');
   await expect(panel.getByRole('button', { name: /Выбрать элемент|Pick element/ })).toBeVisible();
 });
 

@@ -22,10 +22,17 @@ async function serviceWorker(context: import('@playwright/test').BrowserContext)
   return sw;
 }
 
-test('settings-sync рендерится в side panel', async ({ openSidePanel }) => {
+test('секция синхронизации рендерится в настройках', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Синк настроек|Settings sync/ }).click();
-  await expect(panel.getByRole('button', { name: /Включить синк|Enable sync/ })).toBeVisible();
+  // В оболочке v3 синхронизация живёт на экране настроек (не в каталоге инструментов).
+  await panel.getByRole('button', { name: /Настройки|Settings/ }).click();
+  const toggle = panel.getByRole('switch', {
+    name: /Синхронизировать настройки|Sync my settings/,
+  });
+  await expect(toggle).toBeVisible();
+  // Включение раскрывает список синхронизируемых пространств имён.
+  await toggle.click();
+  await expect(panel.getByText(/Синхронизировано только что|Last synced just now/)).toBeVisible();
 });
 
 test('chrome.storage.sync round-trips a sync envelope (эмуляция устройства A→B)', async ({

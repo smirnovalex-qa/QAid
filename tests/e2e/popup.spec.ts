@@ -5,7 +5,7 @@
  * под-вкладка Base64 → ввод известного вектора → корректный вывод → кнопка Copy
  * кладёт результат в буфер обмена.
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 
 test.describe('Popup — декодеры (Base64)', () => {
   test('декодирует известный Base64-вектор и копирует результат', async ({
@@ -23,7 +23,7 @@ test.describe('Popup — декодеры (Base64)', () => {
 
     // 'Zm9vYmFy' == base64('foobar') (RFC 4648 §10).
     await page.getByTestId('dec-input').fill('Zm9vYmFy');
-    await expect(page.getByTestId('dec-output')).toHaveValue('foobar');
+    await expect(page.getByTestId('dec-output')).toContainText('foobar');
 
     // Copy кладёт вывод в буфер обмена.
     await page.getByRole('button', { name: 'Копировать' }).click();
@@ -48,7 +48,7 @@ test.describe('Popup — синхронизация поверхностей (AD
   // без живого пика по странице).
   test('сканирующий инспектор рендерится в popup', async ({ openPopup }) => {
     const page = await openPopup();
-    await page.getByRole('button', { name: 'Контраст WCAG' }).click();
+    await openTool(page, 'inspector-contrast');
     await expect(page.getByRole('button', { name: 'Сканировать страницу' })).toBeVisible();
   });
 
@@ -57,7 +57,7 @@ test.describe('Popup — синхронизация поверхностей (AD
   // side panel — так фича доступна на обеих поверхностях без сломанного UX.
   test('пикер-инспектор виден в popup, но предлагает открыть side panel', async ({ openPopup }) => {
     const page = await openPopup();
-    await page.getByRole('button', { name: 'Инспектор элемента' }).click();
-    await expect(page.getByText(/только в side panel/)).toBeVisible();
+    await openTool(page, 'inspector-probe');
+    await expect(page.getByText(/Работает в боковой панели|Opens in the side panel/)).toBeVisible();
   });
 });

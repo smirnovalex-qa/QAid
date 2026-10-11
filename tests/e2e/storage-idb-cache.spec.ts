@@ -15,7 +15,7 @@
  * диалога — мягкий пропуск (как в storage-editor.spec). Сквозная логика сериализации
  * покрыта юнит-тестами (`idb/logic`, `cache/logic`).
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 import { withPermissionTimeout } from './fixtures/permission-timeout';
 
@@ -78,7 +78,7 @@ async function inject(sw: Worker, tabId: number): Promise<boolean> {
 
 test('табы IndexedDB и Cache рендерятся в side panel', async ({ openSidePanel }) => {
   const panel = await openSidePanel();
-  await panel.getByRole('button', { name: /Storage и cookies|Storage & cookies/ }).click();
+  await openTool(panel, 'storage-editor');
   await expect(panel.getByRole('tab', { name: /IndexedDB/ })).toBeVisible();
   await expect(panel.getByRole('tab', { name: /Cache Storage/ })).toBeVisible();
 });

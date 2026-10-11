@@ -15,7 +15,7 @@
  * До интеграции оркестратором (вызов `installStorageContentHost()` в content-бандле,
  * `'cookies'` в `optional_permissions`) шаги 2–3 могут мягко пропускаться.
  */
-import { test, expect } from './fixtures/extension';
+import { test, expect, openTool } from './fixtures/extension';
 import type { Worker } from '@playwright/test';
 import { withPermissionTimeout } from './fixtures/permission-timeout';
 
@@ -36,7 +36,7 @@ test('редактор storage рендерится в side panel', async ({ ope
   const panel = await openSidePanel();
   // Оболочка редизайна показывает одну активную панель — активируем редактор кликом
   // по кнопке рельса (aria-label = заголовок фичи).
-  await panel.getByRole('button', { name: /Storage и cookies|Storage & cookies/ }).click();
+  await openTool(panel, 'storage-editor');
   await expect(
     panel.getByRole('button', { name: /Загрузить|Load|Обновить|Reload/ }).first(),
   ).toBeVisible();

@@ -12,8 +12,15 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-/** Путь к собранному расширению (tests/e2e/fixtures → корень → dist). */
-const EXT_PATH = path.resolve(HERE, '../../../dist');
+/**
+ * Путь к e2e-варианту расширения (tests/e2e/fixtures → корень → dist-e2e).
+ *
+ * Это копия `dist/`, подготовленная в `global-setup`, где host-доступ и
+ * `scripting`/`cookies` выданы install-time — чтобы грант-жесты в тестах
+ * (`permissions.request`) резолвились без нативного диалога Chrome, который в
+ * headed-прогоне (режим CI) роняет вкладку. См. `global-setup.ts`.
+ */
+const EXT_PATH = path.resolve(HERE, '../../../dist-e2e');
 
 // MV3 SW не поднимается в headless старой модели. По умолчанию — headed; под CI
 // используется xvfb. `E2E_HEADFUL=0` включает новый headless (`--headless=new`).
@@ -66,3 +73,17 @@ export const test = base.extend<ExtensionFixtures>({
 });
 
 export const expect = test.expect;
+
+/**
+ * Открыть инструмент из домашнего каталога по его `featureId`.
+ *
+ * Навигация идёт по стабильному хуку `data-tool` (его несут все кнопки открытия
+ * инструмента в Home: пины, каталог, результаты поиска и «активно сейчас») —
+ * тесты не зависят от отображаемого названия, которое принадлежит v3-таксономии и
+ * может меняться. `.first()` снимает неоднозначность, когда инструмент
+ * одновременно закреплён (карточка-пин) и присутствует в каталоге: любая из
+ * кнопок открывает одну и ту же tool-view.
+ */
+export async function openTool(panel: Page, id: string): Promise<void> {
+  await panel.locator(`[data-tool="${id}"]`).first().click();
+}
