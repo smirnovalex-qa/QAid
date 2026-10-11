@@ -1,117 +1,143 @@
-# QAid
+<div align="center">
 
-Local-first набор QA-инструментов в одном расширении Chrome (Manifest V3): генераторы
-тест-данных, декодеры, инспекторы. Ядро работает офлайн и не делает сетевых вызовов
-(см. [docs/DECISIONS.md](docs/DECISIONS.md), ADR-0007).
+<img src="docs/assets/hero.png" alt="QAid — 20 QA tools that live in your Chrome side panel: capture, inspect, mock and test, all running locally" width="100%" />
 
-> Статус: 🟢 в активной разработке. Реализованы ~20 инструментов (генераторы,
-> декодеры, инспекторы, мок сети, редактор storage/cookies, профили сессий,
-> запись экрана/скриншоты, экспорт бага, Agent Handoff); 1905 юнит-тестов, 94 ADR.
-> Публичного релиза/тега пока нет.
+# QAid — a local-first QA toolbox for Chrome
 
-## Возможности
+20 everyday QA and web-debugging tools in one Chrome side panel — bug reports, page inspectors, network mocking, generators and decoders. Free, open source, and runs entirely on your machine.
 
-- **Генерация тест-данных** — случайные числа и строки, timestamp / хэши / UUID,
-  автозаполнение форм тест-данными с аудитом.
-- **Декодеры** — JWT, Base64, URL, JSON.
-- **Инспекторы страницы** — контраст WCAG, палитра цветов, шрифты, линейка /
-  отступы и «Инспектор элемента» (computed-профиль, matched CSS rules / каскад,
-  живой режим курсором + навигация по DOM-иерархии).
-- **Сеть** — мок запросов (панель/ответы, сценарии, троттлинг/офлайн, CDP-режим,
-  replay с правками), подмена DOM.
-- **Браузерные данные** — редактор storage / cookies / IndexedDB / Cache,
-  профили сессий с hot-swap авторизации и опциональным шифрованием at-rest
-  (WebCrypto), синк настроек между устройствами.
-- **Фиксация багов** — экспорт «состояния бага» (URL + storage + консоль + сеть)
-  с timeline действий, скриншоты с аннотациями и in-page редактором, запись
-  экрана (WebM / GIF), детектор дефектов, snapshot-diff, эмуляция окружения
-  (UA / geo / tz / lang).
-- **Agent Handoff** — отправка баг-репорта в Claude Code / Cursor / Codex одной
-  кнопкой (deep link → файл → буфер), без установки стороннего софта.
-- **Три точки монтажа** — popup, side panel и перетаскиваемая плавающая панель
-  поверх страницы.
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-2F5BEA.svg)](LICENSE)
+[![Manifest V3](https://img.shields.io/badge/Manifest-V3-2F5BEA.svg)](docs/PERMISSIONS.md)
+[![Runs locally](https://img.shields.io/badge/Privacy-100%25%20local-16a34a.svg)](docs/DECISIONS.md)
 
-Ядро работает офлайн и не делает сетевых вызовов (ADR-0007, см.
-[docs/DECISIONS.md](docs/DECISIONS.md)).
+</div>
 
-## Требования
+---
 
-- Node **20 LTS** (см. [`.nvmrc`](.nvmrc)).
-- **pnpm 9** (зафиксирован в `packageManager`). Быстрый способ включить: `corepack enable`.
+## Why QAid
 
-## Установка
+One side panel instead of a drawer of single-purpose extensions and online JWT/UUID sites. Built for **QA engineers, testers and web developers**.
+
+- **20 tools, one panel** — searchable, pinnable, grouped by task.
+- **Local-first** — no account, no telemetry, no network calls from the core.
+- **Manifest V3** — least-privilege permissions, requested at runtime.
+
+---
+
+## What's inside
+
+<img src="docs/assets/whats-inside.png" alt="What's inside QAid: 20 QA tools grouped into Capture & report, Inspect the page, Network & mocks, Browser data, Forms & environment, and Data & generators" width="100%" />
+
+---
+
+## Screenshots
+
+**One side panel, 20 tools** — find any tool with ⌘K, pin your favorites, switch light/dark.
+
+<img src="docs/assets/overview.png" alt="QAid side panel overview: a searchable, pinnable list of 20 QA tools" width="100%" />
+
+**Bug reports a developer can act on** — reproduce the bug; QAid collects steps, errors, network and a screenshot into a local Markdown + JSON artifact.
+
+<img src="docs/assets/bug-report.png" alt="QAid bug report capturing steps, errors, network and a screenshot into a local artifact" width="100%" />
+
+**Fill forms with test data in one click** — valid, max-length, empty or injection values, then check the form for problems.
+
+<img src="docs/assets/forms.png" alt="QAid form filler with valid, max-length, empty and injection test data" width="100%" />
+
+**Decode a JWT in a second** — JWT, Base64, URL and JSON, decoded on your computer.
+
+<img src="docs/assets/decode.png" alt="QAid decoder reading a JWT locally, showing header, payload and expiry" width="100%" />
+
+**Test another language or time zone** — override user agent, language, location and time zone per tab.
+
+<img src="docs/assets/device.png" alt="QAid device and location emulation per tab" width="100%" />
+
+---
+
+## Install
+
+Not on the Chrome Web Store yet — load it as an unpacked extension:
 
 ```bash
 pnpm install
+pnpm build
 ```
 
-## Скрипты
+1. Open `chrome://extensions` and enable **Developer mode**.
+2. Click **Load unpacked** and select the `dist/` folder.
+3. Click the QAid icon, then **Open side panel**.
 
-| Команда                             | Действие                                             |
-| ----------------------------------- | ---------------------------------------------------- |
-| `pnpm dev`                          | Дев-сборка Vite + HMR (загрузка unpacked-расширения) |
-| `pnpm build`                        | `tsc --noEmit` + прод-сборка в `dist/`               |
-| `pnpm typecheck`                    | Проверка типов (`tsc --noEmit`)                      |
-| `pnpm lint`                         | ESLint (0 предупреждений)                            |
-| `pnpm lint:fix`                     | ESLint с автоправкой                                 |
-| `pnpm format` / `pnpm format:check` | Prettier запись / проверка                           |
-| `pnpm test`                         | Vitest + покрытие (гейт ≥ 80% на ядре)               |
-| `pnpm test:watch`                   | Vitest в watch-режиме                                |
-| `pnpm test:e2e`                     | Playwright на собранном расширении                   |
-| `pnpm package`                      | Zip для Chrome Web Store                             |
+Requires **Node 20 LTS** and **pnpm 9** (`corepack enable`). For development with HMR: `pnpm dev`.
 
-## Загрузка расширения (unpacked)
+---
 
-1. `pnpm build` — собирает `dist/`.
-2. Chrome → `chrome://extensions` → включить **Developer mode**.
-3. **Load unpacked** → выбрать папку `dist/`.
-4. Клик по иконке открывает **popup**; кнопка «Открыть side panel» открывает
-   боковую панель (`chrome.sidePanel.open`, требует жеста пользователя).
-5. Service worker логирует `[qaid] installed` (см. «service worker» в
-   `chrome://extensions`).
+## Privacy
 
-Для разработки: `pnpm dev` даёт HMR для popup/side panel (@crxjs).
+QAid's core makes **no network calls and sends no data anywhere**. Bug states, tokens, cookies and page data stay on your computer.
 
-## Упаковка для Chrome Web Store
+It uses a least-privilege permission model: only essential permissions at install, with host access and scripting requested at runtime under a user gesture. Details in [docs/PERMISSIONS.md](docs/PERMISSIONS.md).
 
-```bash
-pnpm package
-```
+---
 
-Собирает прод-версию и создаёт `dist-zip/qaid-<version>.zip` (без
-source maps). Версия берётся из `package.json` (semver → `manifest.version`,
-полный semver — в `version_name`).
+## FAQ
 
-**Права — least-privilege (ADR-0013).** При установке запрашиваются только
-всегда-нужные: `storage`, `sidePanel`, `declarativeNetRequestWithHostAccess`,
-`debugger`, `offscreen` (три последних Chrome запрещает объявлять как optional).
-Видимый install-warning поднимает лишь `debugger` (CDP-режим мока сети); его
-наблюдаемый эффект возникает только под жестом при выборе этого режима. Host-доступ
-(`*://*/*`, `<all_urls>`) и `scripting`/`cookies` — **optional**: запрашиваются
-брокером в рантайме под пользовательским жестом, а не при установке. Полный реестр
-с обоснованием каждого права — [docs/PERMISSIONS.md](docs/PERMISSIONS.md).
+**Is QAid free?** Yes — free and open source under [Apache-2.0](LICENSE).
 
-## Структура
+**Does it send my data anywhere?** No. The core runs locally and makes no network requests.
+
+**Which browsers are supported?** Chromium-based browsers with Manifest V3 and the Side Panel API (Google Chrome and compatible builds).
+
+**Do I need an account?** No sign-up, no login, no telemetry.
+
+**Can it replace DevTools?** It complements DevTools — repetitive QA workflows (bug capture, test data, locale emulation, mocking, decoding) in one searchable panel.
+
+**What languages does the UI support?** English and Russian.
+
+---
+
+## Development
+
+<details>
+<summary>Scripts</summary>
+
+| Command                             | What it does                               |
+| ----------------------------------- | ------------------------------------------ |
+| `pnpm dev`                          | Dev build + HMR                            |
+| `pnpm build`                        | Type-check + production build into `dist/` |
+| `pnpm typecheck`                    | Type checking                              |
+| `pnpm lint` / `pnpm lint:fix`       | ESLint (0 warnings)                        |
+| `pnpm format` / `pnpm format:check` | Prettier                                   |
+| `pnpm test` / `pnpm test:watch`     | Vitest + coverage (≥ 80% on core)          |
+| `pnpm test:e2e`                     | Playwright against the built extension     |
+| `pnpm package`                      | Build a zip for the Chrome Web Store       |
+
+</details>
+
+<details>
+<summary>Project structure</summary>
 
 ```
 src/
-├── platform/     адаптер WebExtensions API (ADR-0014)
-├── background/   service worker + роутинг сообщений
-├── content/      content-скрипты (ISOLATED world) + релей
-├── page/         скрипт MAIN world (перехват fetch/XHR)
-├── popup/        popup-UI (Preact)
+├── platform/     WebExtensions API adapter
+├── background/   service worker + message routing
+├── content/      content scripts + relay
+├── page/         MAIN world script (fetch/XHR interception)
+├── popup/        popup UI (Preact)
 ├── sidepanel/    side panel UI
-├── panel/        тело плавающей панели (iframe на extension-странице)
-├── offscreen/    offscreen-документ (запись экрана, MediaRecorder)
-├── features/     самодостаточные фичи (logic + ui + дескриптор)
+├── panel/        floating panel body
+├── offscreen/    offscreen document (screen recording)
+├── features/     self-contained features (logic + ui + descriptor)
 ├── shared/       messaging, storage, random, serialization…
-├── ui/           дизайн-токены и компоненты
-└── i18n/         каталоги локализации
+├── ui/           design tokens and components
+└── i18n/         localization catalogs
 ```
 
-Подробнее: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
-[docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
+</details>
 
-## Лицензия
+More: [Architecture](docs/ARCHITECTURE.md) · [Contributing](docs/CONTRIBUTING.md) · [Decisions](docs/DECISIONS.md) · [Permissions](docs/PERMISSIONS.md)
 
-[Apache-2.0](LICENSE) (ядро open-core, ADR-0009).
+---
+
+## License
+
+[Apache-2.0](LICENSE) — open-core.
