@@ -204,7 +204,7 @@
   aspect-ratio: 16 / 10;
   border-radius: var(--radius-card);
   overflow: hidden;
-  background: #18181b;
+  background: #141a2e; /* Ink — тёмный бренд-грунт превью (обе темы) */
 }
 
 .video {
@@ -212,7 +212,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: #18181b;
+  background: #141a2e; /* Ink */
 }
 
 .previewMeta {

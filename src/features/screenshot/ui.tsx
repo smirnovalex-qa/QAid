@@ -78,12 +78,15 @@ const TOOL_GLYPHS: Record<AnnotationTool, string> = {
   blur: '▦',
 };
 
-/** Фиксированные образцы цвета (v3 Capture): красный / жёлтый / синий / чёрный. */
+/**
+ * Фиксированные образцы цвета (v3 Capture, бренд QAid Grid): красный (Alarm UI
+ * #D61F45) · amber (#FFB020) · cobalt (#2F5BEA) · ink (#141A2E).
+ */
 const SWATCHES: readonly { hex: string; key: string }[] = [
-  { hex: '#dc2626', key: 'red' },
-  { hex: '#f59e0b', key: 'yellow' },
-  { hex: '#2563eb', key: 'blue' },
-  { hex: '#18181b', key: 'black' },
+  { hex: '#d61f45', key: 'red' },
+  { hex: '#ffb020', key: 'yellow' },
+  { hex: '#2f5bea', key: 'blue' },
+  { hex: '#141a2e', key: 'black' },
 ];
 
 /** Три толщины обводки (v3 Capture): тонкая / средняя / толстая. */

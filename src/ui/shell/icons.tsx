@@ -88,26 +88,106 @@ export function DetachIcon(): JSX.Element {
   );
 }
 
-/** Логотип: скруглённый квадрат --accent с белым квадратом внутри. */
+/**
+ * Логотип QAid Grid: сетка 2×2 из скруглённых плиток (Cobalt · Sky · Deep ·
+ * Amber) с Ink-галочкой в amber-ячейке. Бренд-цвета фиксированы (работают в
+ * обеих темах), поэтому заданы литералами, а не токенами. `aria-hidden` —
+ * рядом в хедере идёт wordmark с текстовой подписью (`QAidWordmark`).
+ */
 export function BrandLogo(props: { size?: number }): JSX.Element {
-  const size = props.size ?? 20;
-  const inner = Math.round(size * 0.35);
-  // Числовые значения Preact трактует как px.
+  const size = props.size ?? 24;
   return (
-    <span
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 128 128"
+      fill="none"
       aria-hidden="true"
-      style={{
-        width: size,
-        height: size,
-        borderRadius: Math.round(size * 0.3),
-        background: 'var(--accent)',
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 'none',
-      }}
+      style={{ flex: 'none', display: 'block' }}
     >
-      <span style={{ width: inner, height: inner, background: '#fff', borderRadius: 2 }} />
-    </span>
+      <rect x="6" y="6" width="54" height="54" rx="15" fill="#2F5BEA" />
+      <rect x="68" y="6" width="54" height="54" rx="15" fill="#4C74F2" />
+      <rect x="6" y="68" width="54" height="54" rx="15" fill="#2347CC" />
+      <rect x="68" y="68" width="54" height="54" rx="15" fill="#FFB020" />
+      <path
+        d="M81 96 L91 106 L109 85"
+        fill="none"
+        stroke="#141A2E"
+        stroke-width="9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+/**
+ * Wordmark «QAid»: буквы наследуют `currentColor` (= --fg, работает в обеих
+ * темах), хвост Q и квадратная точка над i фиксированы Amber. Высота задаётся
+ * пропом; ширина пропорциональна (≈2.5×). `role="img"` + `aria-label` —
+ * текстовая подпись бренда.
+ */
+export function QAidWordmark(props: { height?: number }): JSX.Element {
+  const h = props.height ?? 19;
+  const w = Math.round(h * 2.52); // viewBox 252×100 → соотношение ≈2.52
+  return (
+    <svg
+      width={w}
+      height={h}
+      viewBox="10 10 252 100"
+      fill="none"
+      role="img"
+      aria-label="QAid"
+      style={{ flex: 'none', display: 'block', color: 'var(--fg)' }}
+    >
+      <circle
+        cx="52"
+        cy="59.75"
+        r="29.75"
+        stroke="currentColor"
+        stroke-width="15"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path d="M68 78 L86 96" stroke="#FFB020" stroke-width="15" stroke-linecap="round" />
+      <path
+        d="M110 89.5 L136 30 L162 89.5"
+        stroke="currentColor"
+        stroke-width="15"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M121 70 H151"
+        stroke="currentColor"
+        stroke-width="15"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M184 52 V89.5"
+        stroke="currentColor"
+        stroke-width="15"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <rect x="174" y="17" width="20" height="20" rx="6" fill="#FFB020" />
+      <circle
+        cx="228"
+        cy="70.5"
+        r="19"
+        stroke="currentColor"
+        stroke-width="15"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M247 26 V89.5"
+        stroke="currentColor"
+        stroke-width="15"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
   );
 }

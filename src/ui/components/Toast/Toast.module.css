@@ -1,7 +1,7 @@
 /*
- * Тосты (редизайн): тёмная моно-пилюля по центру снизу. Тёмный фон одинаков
- * в обеих темах (примитивы zinc-900/zinc-50) — как в эталоне. Контейнер —
- * живой регион поверх всего (--z-toast).
+ * Тосты (редизайн): тёмная моно-пилюля по центру снизу. Фон Ink #141A2E +
+ * белый текст одинаковы в обеих темах (бренд QAid Grid) — как в эталоне.
+ * Контейнер — живой регион поверх всего (--z-toast).
  */
 .container {
   position: fixed;
@@ -21,8 +21,8 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  background: var(--c-zinc-900);
-  color: var(--c-zinc-50);
+  background: var(--c-ink);
+  color: var(--c-white);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-toast);
   padding: 8px 14px;

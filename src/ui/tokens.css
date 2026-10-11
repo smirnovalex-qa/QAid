@@ -1,33 +1,34 @@
 /*
- * Дизайн-токены QAid — v3.
+ * Дизайн-токены QAid — v3 (бренд QAid Grid, Oct 2026).
  *
  * Двухслойная система: примитивы (сырые значения) → семантические токены
  * (роли). Компоненты используют ТОЛЬКО семантические токены (--bg, --fg,
- * --accent, --accent-ink, …), никогда примитивы напрямую. Тёмная тема
+ * --accent, --accent-ink, --amber, …), никогда примитивы напрямую. Тёмная тема
  * переопределяет семантический слой.
  *
- * Палитра v3 — zinc-нейтрали + indigo-акцент (конфигурируемый). Значения точно
- * сверены с `renderVals()` → `themeVars` в эталоне v3-дизайна.
+ * Палитра — QAid Grid: cool-slate нейтрали, тонированные к Ink #141A2E,
+ * + Cobalt-акцент (#2F5BEA, конфигурируемый → Deep #2347CC) + Amber (#FFB020,
+ * «результат»/единственный главный CTA). Значения точно сверены с таблицей
+ * токенов в `QAid Design System.dc.html` (handoff v3).
  *
  * Легаси-алиасы (--fg-muted, --faint, --radius-field, --fs-label, …) сохранены и
  * указывают на ближайший v3-токен: фичи мигрируют на новый слой постепенно, без
  * поломки ещё не переписанного CSS. Новый код использует только v3-роли.
  */
 :root {
-  /* ── primitives: neutrals (zinc) ─────────────────────────────────────── */
-  --c-zinc-50: #fafafa;
-  --c-zinc-100: #f6f6f7;
-  --c-zinc-200: #e4e4e7;
-  --c-zinc-300: #d4d4d8;
-  --c-zinc-400: #a1a1aa;
-  --c-zinc-500: #71717a;
-  --c-zinc-600: #52525b;
-  --c-zinc-900: #18181b;
+  /* ── primitives: brand (QAid Grid) ───────────────────────────────────── */
+  --c-cobalt: #2f5bea; /* main tile, accent */
+  --c-sky: #4c74f2; /* light tile, graphics only */
+  --c-deep: #2347cc; /* dark tile, accent-ink, hover */
+  --c-amber: #ffb020; /* result cell, single main CTA */
+  --c-ink: #141a2e; /* text, check mark, dark grounds */
+  --c-alarm: #f43f5e; /* logo fail state only */
+  --c-alarm-ui: #d61f45; /* UI danger */
   --c-white: #fff;
 
-  /* ── primitives: accent (indigo, default) ────────────────────────────── */
-  --c-indigo-600: #4f46e5;
-  --c-indigo-700: #4338ca;
+  /* ── primitives: accent hovers ───────────────────────────────────────── */
+  --c-cobalt-hover: #2347cc; /* Cobalt → Deep on hover */
+  --c-amber-hover: #f5a300;
 
   /* ── spacing scale (4pt) ─────────────────────────────────────────────── */
   --space-1: 4px;
@@ -48,9 +49,10 @@
   --radius-hero: 14px;
   --radius-pill: 999px;
 
-  /* ── typography: IBM Plex Sans/Mono (локальные @font-face — global.css) ─ */
-  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* ── typography: Onest (UI) + JetBrains Mono (values/code) ─────────────
+       Локальные @font-face бандлятся в fonts.css (MV3: без удалённых шрифтов). */
+  --font-sans: 'Onest', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
   /* scale: 12 help/meta/labels · 12.5 secondary/code · 13 body/rows ·
      13.5 row titles · 14 inputs/primary · 17–18 screen titles ·
      20–26 counters · 44 recording timer */
@@ -82,45 +84,48 @@
   --dur-base: 200ms;
   --ease: cubic-bezier(0.2, 0, 0, 1);
 
-  /* ══ semantic (light) — сверено с themeVars (light) ══════════════════════ */
+  /* ══ semantic (light) — таблица токенов QAid Grid (handoff v3) ══════════ */
   color-scheme: light;
 
-  --bg: #f7f7f8;
+  --bg: #f6f8fa;
   --surface: #ffffff;
-  --surface2: #f1f1f3;
+  --surface2: #eef2f7;
   --input: #ffffff;
-  --code: #fafafa;
+  --code: #f8fafc;
 
-  --fg: #18181b;
-  --muted: #52525b; /* AAA 7.7:1 на белом */
-  --subtle: #63636b; /* AA 5.9:1 на белом */
+  --fg: #141a2e; /* AAA 17.3:1 на белом */
+  --muted: #475369; /* AAA 7.75:1 на белом, 6.9:1 на --surface2 */
+  --subtle: #5b6678; /* AA 5.16:1 на --surface2 */
 
-  --border: #e4e4e7;
-  --border-strong: #c9c9cf;
-  --line: #ececef;
+  --border: #dde3ec;
+  --border-strong: #8792a6; /* non-text 3.14:1 на белом (1.4.11) */
+  --line: #e7ecf2;
 
-  --accent: var(--c-indigo-600);
-  --accent-fg: var(--c-white);
-  --accent-soft: #eef0ff;
-  --accent-line: #c7cbfb;
-  --accent-ink: #3730a3; /* ≈9:1 на --accent-soft */
+  --accent: var(--c-cobalt);
+  --accent-fg: var(--c-white); /* white на Cobalt 5.52:1 */
+  --accent-soft: #ebf0fe;
+  --accent-line: #c3d1fb;
+  --accent-ink: #2347cc; /* 6.48:1 на --accent-soft, 7.38:1 на белом */
 
-  --switch-off: #8b8b94;
+  --switch-off: #7a869a; /* non-text 3.68:1 */
 
-  --danger: #c81e1e;
-  --danger-ink: #b91c1c;
-  --danger-soft: #fef2f2;
-  --danger-line: #fecaca;
+  --danger: var(--c-alarm-ui); /* #D61F45 — white 5.07:1 */
+  --danger-ink: #be123c;
+  --danger-soft: #fff1f3;
+  --danger-line: #fbc5cf;
 
-  --success: #047857;
-  --success-ink: #047857;
-  --success-soft: #ecfdf5;
+  --success: #15803d;
+  --success-ink: #166534;
+  --success-soft: #eaf8ef;
 
   --warn: #d97706;
-  --warn-ink: #92400e;
-  --warn-soft: #fffbeb;
+  --warn-ink: #8a5300;
+  --warn-soft: #fff6e0;
 
-  --overlay: rgb(24 24 27 / 0.28);
+  --amber: var(--c-amber);
+  --on-amber: var(--c-ink); /* Ink на Amber 9.44:1; white на Amber запрещён */
+
+  --overlay: rgb(20 26 46 / 0.32);
   --focus-ring: var(--accent);
 
   /* ── legacy-алиасы (указывают на ближайший v3-токен) ─────────────────── */
@@ -128,7 +133,7 @@
   --fg-muted: var(--muted);
   --faint: var(--subtle);
   --fg-caption: var(--muted);
-  --accent-hover: var(--c-indigo-700);
+  --accent-hover: var(--c-cobalt-hover);
   --accent-strong: var(--accent-ink);
   --danger-fg: var(--c-white);
   --warning: var(--warn);
@@ -155,42 +160,45 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  --bg: #0f0f12;
-  --surface: #18181c;
-  --surface2: #222227;
-  --input: #121215;
-  --code: #121215;
+  --bg: #0b1120;
+  --surface: #111a2e;
+  --surface2: #18233a;
+  --input: #0e1628;
+  --code: #0e1628;
 
-  --fg: #f4f4f5;
-  --muted: #c4c4cc; /* ≈11:1 на #18181c */
-  --subtle: #a1a1aa; /* ≈7:1 на #18181c */
+  --fg: #e6ebf3; /* 14.5:1 на #111A2E */
+  --muted: #b4bfd0; /* AAA 8.4–9.3:1 */
+  --subtle: #93a0b4; /* AA 6.55:1 */
 
-  --border: #2f2f36;
-  --border-strong: #45454e;
-  --line: #26262c;
+  --border: #26324a;
+  --border-strong: #6b7a99; /* non-text 4.02:1 на #111A2E */
+  --line: #1c2740;
 
-  --accent: var(--c-indigo-600);
+  --accent: var(--c-cobalt);
   --accent-fg: var(--c-white);
-  --accent-soft: #25244a;
-  --accent-line: #3d3b78;
-  --accent-ink: #b4bcff; /* ≈8:1 на #25244a */
+  --accent-soft: #1a2a55;
+  --accent-line: #2f4a9a;
+  --accent-ink: #a9bcff; /* 7.52:1 на #1A2A55 */
 
-  --switch-off: #6e6e78;
+  --switch-off: #6b7a99; /* non-text 4.02:1 */
 
-  --danger: #dc2626;
-  --danger-ink: #fca5a5;
-  --danger-soft: rgb(220 38 38 / 0.16);
-  --danger-line: rgb(248 113 113 / 0.35);
+  --danger: #e11d48; /* white 4.70:1 */
+  --danger-ink: #fda4af;
+  --danger-soft: rgb(244 63 94 / 0.14);
+  --danger-line: rgb(251 113 133 / 0.38);
 
-  --success: #059669;
-  --success-ink: #6ee7b7;
-  --success-soft: rgb(16 185 129 / 0.14);
+  --success: #15803d;
+  --success-ink: #86efac;
+  --success-soft: rgb(34 197 94 / 0.14);
 
   --warn: #d97706;
   --warn-ink: #fcd34d;
-  --warn-soft: rgb(245 158 11 / 0.14);
+  --warn-soft: rgb(255 176 32 / 0.14);
 
-  --overlay: rgb(0 0 0 / 0.55);
+  --amber: var(--c-amber);
+  --on-amber: var(--c-ink);
+
+  --overlay: rgb(0 0 0 / 0.6);
   --focus-ring: var(--accent-ink);
 
   /* legacy dark remaps */

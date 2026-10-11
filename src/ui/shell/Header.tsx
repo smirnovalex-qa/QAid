@@ -1,7 +1,7 @@
 import type { JSX } from 'preact';
 import { t } from '@/i18n';
 import { cn } from '@/ui/cn';
-import { BrandLogo, SearchIcon } from './icons';
+import { BrandLogo, QAidWordmark, SearchIcon } from './icons';
 import { ChevronLeftIcon, GearIcon, StarIcon } from './toolIcons';
 import styles from './surface.module.css';
 
@@ -35,8 +35,8 @@ export function Header(props: HeaderProps): JSX.Element {
     <header class={styles.header}>
       {home ? (
         <div class={styles.brand}>
-          <BrandLogo size={22} />
-          <span class={styles.brandTitle}>QAid</span>
+          <BrandLogo size={24} />
+          <QAidWordmark height={19} />
         </div>
       ) : (
         <>

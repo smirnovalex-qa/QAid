@@ -3,6 +3,7 @@
  * вместе с tokens.css — не в каждом модуле, иначе дублирование.
  */
 @import './tokens.css';
+@import './fonts.css';
 
 *,
 *::before,
@@ -27,9 +28,9 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Акцентная подсветка выделения (мягкий indigo-тинт). */
+/* Акцентная подсветка выделения (мягкий Cobalt-тинт). */
 ::selection {
-  background: rgb(79 70 229 / 0.18);
+  background: rgb(47 91 234 / 0.18);
 }
 
 /*

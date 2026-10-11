@@ -26,17 +26,12 @@
   border-bottom: 1px solid var(--line);
 }
 
+/* Лого-локап QAid: grid-иконка 24×24 + wordmark 19px, зазор 9px (handoff v3). */
 .brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   min-width: 0;
-}
-
-.brandTitle {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--fg);
 }
 
 .backBtn,
