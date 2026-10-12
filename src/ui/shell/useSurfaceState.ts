@@ -46,6 +46,22 @@ export interface SurfaceState {
   setThemePersisted: (next: ThemeMode) => void;
 }
 
+/**
+ * Подготавливает навигацию целевой поверхности (write-before-open): поверхность
+ * гидратируется из своих ключей один раз при монтировании, поэтому перед её открытием
+ * (popup → side panel) записываем туда нужные view/tool. Невалидный `tool` игнорируется —
+ * пишется только view. Ошибки хранилища пробрасываются вызывающему.
+ */
+export async function stageSurfaceNavigation(
+  surface: 'popup' | 'sidepanel' | 'panel',
+  view: View,
+  tool?: string,
+): Promise<void> {
+  const items: Record<string, unknown> = { [keyView(surface)]: view };
+  if (tool !== undefined && VALID_TOOL.has(tool)) items[keyTool(surface)] = tool;
+  await storageLocal.set(items);
+}
+
 export function useSurfaceState(surface: 'popup' | 'sidepanel' | 'panel'): SurfaceState {
   const [view, setView] = useState<View>('home');
   const [tool, setTool] = useState<string>('');

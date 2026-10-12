@@ -23,13 +23,24 @@ import { SettingsView } from './SettingsView';
 import { SearchPalette } from './SearchPalette';
 import { PopupFallback } from './PopupFallback';
 import { LazyPanel } from './LazyPanel';
-import { useSurfaceState } from './useSurfaceState';
+import { stageSurfaceNavigation, useSurfaceState } from './useSurfaceState';
 import { liveToolId, toolStatus } from './status';
 import { PANEL_ONLY, toolNameKey } from './taxonomy';
 import styles from './surface.module.css';
 
-/** Открыть side panel текущего окна (только из пользовательского жеста). */
-async function openSidePanel(): Promise<void> {
+/**
+ * Открыть side panel текущего окна (только из пользовательского жеста). Если задан `tool`,
+ * сначала (write-before-open) записываем навигацию side panel на этот инструмент, чтобы
+ * она гидратировалась на нём, а не на последнем открытом там. Сбой записи не мешает открытию.
+ */
+async function openSidePanel(tool?: string): Promise<void> {
+  if (tool) {
+    try {
+      await stageSurfaceNavigation('sidepanel', 'tool', tool);
+    } catch (e) {
+      logger.error('surface: stage side panel navigation', e);
+    }
+  }
   try {
     const win = await browser.windows.getCurrent();
     if (win.id !== undefined) await sidePanel.open({ windowId: win.id });
@@ -124,7 +135,7 @@ export function QASurface(props: QASurfaceProps): JSX.Element {
         aria-label={t('shell.openSidePanel')}
         title={t('shell.openSidePanel')}
         onClick={() => {
-          void openSidePanel();
+          void openSidePanel(s.view === 'tool' ? s.tool : undefined);
         }}
       >
         <SidePanelIcon />
@@ -178,7 +189,7 @@ export function QASurface(props: QASurfaceProps): JSX.Element {
           <PopupFallback
             toolId={s.tool}
             onOpenPanel={() => {
-              void openSidePanel();
+              void openSidePanel(s.tool);
             }}
           />
         ) : feature ? (

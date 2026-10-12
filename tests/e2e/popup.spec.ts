@@ -60,4 +60,32 @@ test.describe('Popup — синхронизация поверхностей (AD
     await openTool(page, 'inspector-probe');
     await expect(page.getByText(/Работает в боковой панели|Opens in the side panel/)).toBeVisible();
   });
+
+  // Hand-off: side panel гидратируется из СВОИХ ключей навигации, поэтому popup обязан
+  // записать в них текущий инструмент до открытия панели (иначе откроется «последнее»).
+  test('«Открыть side panel» стейджит навигацию side panel на текущий инструмент', async ({
+    openPopup,
+  }) => {
+    const page = await openPopup();
+    await openTool(page, 'inspector-probe');
+    await expect(page.getByText(/Работает в боковой панели|Opens in the side panel/)).toBeVisible();
+
+    // Кнопка fallback в теле (в шапке одноимённая иконка — берём кнопку с текстом в body).
+    await page
+      .getByRole('button', { name: /Открыть side panel|Open side panel/ })
+      .last()
+      .click();
+
+    await expect
+      .poll(() =>
+        page.evaluate(async () => {
+          const r = await chrome.storage.local.get([
+            'ui.surface.view.sidepanel',
+            'ui.surface.tool.sidepanel',
+          ]);
+          return [r['ui.surface.view.sidepanel'], r['ui.surface.tool.sidepanel']];
+        }),
+      )
+      .toEqual(['tool', 'inspector-probe']);
+  });
 });
