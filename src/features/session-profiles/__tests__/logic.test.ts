@@ -13,6 +13,7 @@ import {
   newProfileId,
   parseProfile,
   profilesForScope,
+  refreshProfileSnapshot,
   removeProfile,
   renameProfile,
   scopeCompatibility,
@@ -62,6 +63,19 @@ describe('createProfile / touchProfile', () => {
     expect(t.createdAt).toBe(adminProfile.createdAt);
     expect(t.id).toBe(adminProfile.id);
     expect(t.name).toBe(adminProfile.name);
+  });
+
+  it('refreshProfileSnapshot меняет снимок и updatedAt, сохраняя id/name/scope/createdAt', () => {
+    const fresh = { cookies: [], local: [{ key: 'rt', value: 'new' }], session: [] };
+    const r = refreshProfileSnapshot(adminProfile, fresh, NOW + 5000);
+    expect(r.snapshot).toBe(fresh);
+    expect(r.updatedAt).toBe(NOW + 5000);
+    expect(r.id).toBe(adminProfile.id);
+    expect(r.name).toBe(adminProfile.name);
+    expect(r.scope).toEqual(adminProfile.scope);
+    expect(r.createdAt).toBe(adminProfile.createdAt);
+    // Исходный профиль не мутируется.
+    expect(adminProfile.snapshot).not.toBe(fresh);
   });
 });
 

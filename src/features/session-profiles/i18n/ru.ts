@@ -34,6 +34,7 @@ const ru: Record<string, string> = {
   'sessionProfiles.duplicate': 'Дублировать',
   'sessionProfiles.delete': 'Удалить',
   'sessionProfiles.export': 'Экспорт',
+  'sessionProfiles.refresh': 'Обновить из текущей сессии',
   'sessionProfiles.import': 'Импорт профиля',
   'sessionProfiles.importPreview': 'Предпросмотр импорта',
   'sessionProfiles.reveal': 'Показать',
@@ -136,6 +137,8 @@ const ru: Record<string, string> = {
   'sessionProfiles.confirmSwap':
     'Переключить сессию на этой вкладке? Прогноз: записать {applied}, удалить {removed}. Вкладка перезагрузится.',
   'sessionProfiles.confirmDelete': 'Удалить профиль «{name}»? Действие необратимо.',
+  'sessionProfiles.confirmRefresh':
+    'Перезаписать сохранённую сессию профиля «{name}» текущей живой? Старые данные будут потеряны.',
   'sessionProfiles.confirmImport': 'Импортировать и сохранить профиль «{name}»?',
   'sessionProfiles.diff': 'Добавится {added}, изменится {changed}, вне профиля {removed}',
 
@@ -145,6 +148,7 @@ const ru: Record<string, string> = {
   'sessionProfiles.report.saved': 'Сохранено.',
   'sessionProfiles.report.deleted': 'Удалено.',
   'sessionProfiles.report.duplicated': 'Дублировано.',
+  'sessionProfiles.report.refreshed': 'Профиль обновлён из текущей сессии.',
   'sessionProfiles.report.imported': 'Импортировано.',
 
   // Ошибки

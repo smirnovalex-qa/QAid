@@ -158,6 +158,19 @@ export function touchProfile(profile: SessionProfile, now: number): SessionProfi
 }
 
 /**
+ * Перезаписывает снимок существующего профиля свежим (пересъёмка текущей сессии).
+ * Сохраняет `id`/`name`/`scope`/`createdAt`, меняет `snapshot` и `updatedAt` (инжектированный
+ * `now`). Нужен для ротируемых refresh-токенов: сохранённый снимок устаревает.
+ */
+export function refreshProfileSnapshot(
+  profile: SessionProfile,
+  snapshot: StorageSnapshot,
+  now: number,
+): SessionProfile {
+  return { ...profile, snapshot, updatedAt: now };
+}
+
+/**
  * Собирает снимок состояния из результатов чтения браузера (cookies + две области
  * web storage). Делает защитные копии массивов, чтобы снимок не разделял ссылку с
  * источником чтения (иммутабельность профиля).

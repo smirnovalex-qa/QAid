@@ -34,6 +34,7 @@ const en: Record<string, string> = {
   'sessionProfiles.duplicate': 'Duplicate',
   'sessionProfiles.delete': 'Delete',
   'sessionProfiles.export': 'Export',
+  'sessionProfiles.refresh': 'Refresh from current session',
   'sessionProfiles.import': 'Import profile',
   'sessionProfiles.importPreview': 'Preview import',
   'sessionProfiles.reveal': 'Reveal',
@@ -135,6 +136,8 @@ const en: Record<string, string> = {
   'sessionProfiles.confirmSwap':
     'Swap the session on this tab? Predicted: {applied} written, {removed} removed. The tab will reload.',
   'sessionProfiles.confirmDelete': 'Delete the profile “{name}”? This cannot be undone.',
+  'sessionProfiles.confirmRefresh':
+    'Overwrite the stored session of “{name}” with the current live one? The old data will be lost.',
   'sessionProfiles.confirmImport': 'Import and save the profile “{name}”?',
   'sessionProfiles.diff': 'Adds {added}, changes {changed}, {removed} not in this profile',
 
@@ -144,6 +147,7 @@ const en: Record<string, string> = {
   'sessionProfiles.report.saved': 'Saved.',
   'sessionProfiles.report.deleted': 'Deleted.',
   'sessionProfiles.report.duplicated': 'Duplicated.',
+  'sessionProfiles.report.refreshed': 'Profile refreshed from the current session.',
   'sessionProfiles.report.imported': 'Imported.',
 
   // Errors

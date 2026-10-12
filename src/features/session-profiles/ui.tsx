@@ -39,6 +39,7 @@ import {
   parseProfile,
   passwordStrength,
   profilesForScope,
+  refreshProfileSnapshot,
   removeProfile,
   scopeCompatibility,
   serializeProfile,
@@ -98,6 +99,7 @@ type Pending =
   | { kind: 'delete'; profile: SessionProfile }
   | { kind: 'import'; profile: SessionProfile; diff: SnapshotDiff }
   | { kind: 'export'; profile: SessionProfile }
+  | { kind: 'refresh'; profile: SessionProfile; snapshot: StorageSnapshot; diff: SnapshotDiff }
   | null;
 
 export function SessionProfilesPanel(): JSX.Element {
@@ -480,6 +482,56 @@ export function SessionProfilesPanel(): JSX.Element {
       }
     });
 
+  /**
+   * Шаг 1 пересъёмки: снимаем ТЕКУЩУЮ сессию вкладки, считаем diff к сохранённому снимку и
+   * просим подтвердить перезапись (ротируемые refresh-токены делают старый снимок мёртвым).
+   */
+  const onRefresh = (profile: SessionProfile): Promise<void> =>
+    run(async (isCurrent) => {
+      // Defense-in-depth: сессию чужого origin с текущей вкладки не снять.
+      if (scope === null) {
+        setError(t('sessionProfiles.error.noScope'));
+        return;
+      }
+      const compat = scopeCompatibility(profile.scope, scope);
+      if (!compat.compatible) {
+        setError(
+          compat.reason === 'domain-mismatch'
+            ? t('sessionProfiles.scopeMismatch.domain')
+            : t('sessionProfiles.scopeMismatch.origin'),
+        );
+        return;
+      }
+      const tabId = await ensureTab(STORAGE_PERMS, isCurrent);
+      if (tabId === null) return;
+      const withCookies = await getBroker().ensure(COOKIE_PERMS);
+      if (!isCurrent()) return;
+      setCookiesDenied(!withCookies);
+      const snapshot = await captureCurrentSnapshot(tabId, { withCookies });
+      if (!isCurrent()) return;
+      const diff = diffSnapshot(profile.snapshot, snapshot);
+      setPending({ kind: 'refresh', profile, snapshot, diff });
+    });
+
+  /** Шаг 2 пересъёмки (после подтверждения): перезаписываем снимок на месте и метим активный. */
+  const applyRefresh = (profile: SessionProfile, snapshot: StorageSnapshot): void => {
+    const updated = refreshProfileSnapshot(profile, snapshot, Date.now());
+    const origin = scope?.origin;
+    // Свежий снимок = живая сессия → профиль активен для origin. Пишем строго после commitProfiles.
+    void (async () => {
+      const saved = await commitProfiles(upsertProfile(profiles, updated));
+      if (!saved) return;
+      if (origin !== undefined) {
+        await sessionProfilesBinding.update({
+          activeByOrigin: { ...activeByOrigin, [origin]: profile.id },
+        });
+      }
+      setReport(t('sessionProfiles.report.refreshed'));
+    })().catch((e: unknown) => {
+      setError(e instanceof Error ? e.message : t('sessionProfiles.error.generic'));
+    });
+  };
+
   const onDuplicate = (profile: SessionProfile): void => {
     void commitProfiles(duplicateProfile(profiles, profile.id, Date.now()));
     setReport(t('sessionProfiles.report.duplicated'));
@@ -563,6 +615,7 @@ export function SessionProfilesPanel(): JSX.Element {
     if (p.kind === 'swap') void applySwap(p.profile, p.plan);
     else if (p.kind === 'delete') applyDelete(p.profile);
     else if (p.kind === 'export') doExport(p.profile);
+    else if (p.kind === 'refresh') applyRefresh(p.profile, p.snapshot);
     else applyImport(p.profile);
   };
 
@@ -614,11 +667,19 @@ export function SessionProfilesPanel(): JSX.Element {
     }
   }, [scope]);
 
-  const renderProfileCard = (p: SessionProfile, active: boolean): JSX.Element => (
+  const renderProfileCard = (
+    p: SessionProfile,
+    active: boolean,
+    canRefresh: boolean,
+  ): JSX.Element => (
     <ProfileCard
       key={p.id}
       profile={p}
       active={active}
+      canRefresh={canRefresh}
+      onRefresh={() => {
+        void onRefresh(p);
+      }}
       busy={busy}
       confirming={pending?.kind === 'swap' && pending.profile.id === p.id}
       swapCompat={pending?.kind === 'swap' && pending.profile.id === p.id ? pending.compat : null}
@@ -736,6 +797,20 @@ export function SessionProfilesPanel(): JSX.Element {
               {t('sessionProfiles.vault.exportWarn', { name: pending.profile.name })}
             </p>
           ) : null}
+          {pending.kind === 'refresh' ? (
+            <>
+              <p data-testid="sp-refresh-warn">
+                {t('sessionProfiles.confirmRefresh', { name: pending.profile.name })}
+              </p>
+              <p class={styles.diff} data-testid="sp-refresh-diff">
+                {t('sessionProfiles.diff', {
+                  added: pending.diff.total.added,
+                  changed: pending.diff.total.changed,
+                  removed: pending.diff.total.removed,
+                })}
+              </p>
+            </>
+          ) : null}
           {pending.kind === 'import' ? (
             <>
               <p>{t('sessionProfiles.confirmImport', { name: pending.profile.name })}</p>
@@ -791,7 +866,7 @@ export function SessionProfilesPanel(): JSX.Element {
           {currentProfiles.length === 0 ? (
             <div class={styles.empty}>{t('sessionProfiles.empty')}</div>
           ) : (
-            currentProfiles.map((p) => renderProfileCard(p, p.id === activeId))
+            currentProfiles.map((p) => renderProfileCard(p, p.id === activeId, true))
           )}
         </div>
       )}
@@ -817,7 +892,7 @@ export function SessionProfilesPanel(): JSX.Element {
                     {g.origin}
                   </span>
                   {g.profiles.map((p) =>
-                    renderProfileCard(p, p.id === activeByOrigin[p.scope.origin]),
+                    renderProfileCard(p, p.id === activeByOrigin[p.scope.origin], false),
                   )}
                 </div>
               ))}
@@ -1146,6 +1221,9 @@ interface ProfileCardProps {
   readonly onSwitch: () => void;
   readonly onConfirmSwap: () => void;
   readonly onCancelSwap: () => void;
+  /** Пересъёмка доступна только карточкам текущего сайта (чужой origin со вкладки не снять). */
+  readonly canRefresh: boolean;
+  readonly onRefresh: () => void;
   readonly onDuplicate: () => void;
   readonly onDelete: () => void;
   readonly onExport: () => void;
@@ -1363,6 +1441,17 @@ function ProfileCard(props: ProfileCardProps): JSX.Element {
                 <button type="button" class={styles.ghostBtn} onClick={startEdit}>
                   {t('sessionProfiles.edit')}
                 </button>
+                {props.canRefresh ? (
+                  <button
+                    type="button"
+                    class={styles.ghostBtn}
+                    disabled={props.busy}
+                    data-testid="sp-refresh"
+                    onClick={props.onRefresh}
+                  >
+                    {t('sessionProfiles.refresh')}
+                  </button>
+                ) : null}
                 <button type="button" class={styles.ghostBtn} onClick={props.onDuplicate}>
                   {t('sessionProfiles.duplicate')}
                 </button>

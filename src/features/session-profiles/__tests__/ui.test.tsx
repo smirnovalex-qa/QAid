@@ -160,6 +160,61 @@ describe('SessionProfilesPanel', () => {
     });
   });
 
+  it('refresh overwrites the existing profile in place and marks it active', async () => {
+    const stale = createProfile({
+      name: 'Admin',
+      scope: { origin: 'https://x.test', cookieDomain: 'x.test' },
+      snapshot: { cookies: [], local: [{ key: 'refresh_token', value: 'old' }], session: [] },
+      now: 1,
+    });
+    await sessionProfilesBinding.set({ profiles: [stale], activeByOrigin: {} });
+
+    renderPanel();
+    await settle();
+
+    fireEvent.click(screen.getByRole('button', { name: t('sessionProfiles.details') }));
+    fireEvent.click(screen.getByTestId('sp-refresh'));
+
+    // Destructive overwrite: warning + diff, nothing written until confirmed.
+    await waitFor(() => {
+      expect(screen.getByTestId('sp-refresh-warn')).toHaveTextContent('Admin');
+    });
+    expect(screen.getByTestId('sp-refresh-diff')).toBeInTheDocument();
+    expect(sessionProfilesBinding.value.value.profiles[0]).toEqual(stale);
+
+    fireEvent.click(screen.getByRole('button', { name: t('sessionProfiles.confirm') }));
+
+    await waitFor(() => {
+      const state = sessionProfilesBinding.value.value;
+      expect(state.profiles).toHaveLength(1);
+      const [p] = state.profiles;
+      expect(p?.id).toBe(stale.id);
+      expect(p !== undefined && 'snapshot' in p ? p.snapshot.local : []).toEqual([
+        { key: 'theme', value: 'dark' },
+      ]);
+      expect(state.activeByOrigin['https://x.test']).toBe(stale.id);
+    });
+    expect(await screen.findByText(t('sessionProfiles.active'))).toBeInTheDocument();
+    expect(screen.getByText(t('sessionProfiles.report.refreshed'))).toBeInTheDocument();
+  });
+
+  it('does not offer refresh on other-site profiles', async () => {
+    const other = createProfile({
+      name: 'Other',
+      scope: { origin: 'https://y.test', cookieDomain: 'y.test' },
+      snapshot: { cookies: [], local: [], session: [] },
+      now: 1,
+    });
+    await sessionProfilesBinding.set({ profiles: [other], activeByOrigin: {} });
+
+    renderPanel();
+    await settle();
+
+    fireEvent.click(screen.getByText(new RegExp(t('sessionProfiles.otherSites'))));
+    fireEvent.click(screen.getByRole('button', { name: t('sessionProfiles.details') }));
+    expect(screen.queryByTestId('sp-refresh')).toBeNull();
+  });
+
   it('degrades gracefully when the cookies permission is declined', async () => {
     cookiesGranted = false;
     renderPanel();
