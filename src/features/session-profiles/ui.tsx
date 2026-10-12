@@ -181,17 +181,18 @@ export function SessionProfilesPanel(): JSX.Element {
    * набор (свежий IV на запись), иначе пишет открыто. Залоченный сейф не писать — это
    * защищает от затирания зашифрованных данных открытыми.
    */
-  const commitProfiles = async (next: SessionProfile[]): Promise<void> => {
+  const commitProfiles = async (next: SessionProfile[]): Promise<boolean> => {
     if (vault === undefined) {
       await sessionProfilesBinding.update({ profiles: next });
-      return;
+      return true;
     }
     const res = await vaultStore.encryptProfiles(next);
     if (!res.ok) {
       setError(t('sessionProfiles.vault.needUnlock'));
-      return;
+      return false;
     }
     await sessionProfilesBinding.update({ profiles: res.value });
+    return true;
   };
 
   /** Локализованный текст кода ошибки сейфа. */
@@ -416,7 +417,18 @@ export function SessionProfilesPanel(): JSX.Element {
     const name = draftName.trim();
     if (name === '' || captured === null || scope === null) return;
     const profile = createProfile({ name, scope, snapshot: captured, now: Date.now() });
-    void commitProfiles(upsertProfile(profiles, profile));
+    const origin = scope.origin;
+    // Снимок = живая сессия, значит новый профиль сразу активен для origin. Пишем строго
+    // после commitProfiles (в т.ч. после шифрования сейфом), чтобы записи не перетёрли друг друга.
+    void (async () => {
+      const saved = await commitProfiles(upsertProfile(profiles, profile));
+      if (!saved) return;
+      await sessionProfilesBinding.update({
+        activeByOrigin: { ...activeByOrigin, [origin]: profile.id },
+      });
+    })().catch((e: unknown) => {
+      setError(e instanceof Error ? e.message : t('sessionProfiles.error.generic'));
+    });
     setNaming(false);
     setCaptured(null);
     setDraftName('');

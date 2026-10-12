@@ -120,7 +120,10 @@ describe('SessionProfilesPanel', () => {
       expect(state.profiles).toHaveLength(1);
       expect(state.profiles[0]?.name).toBe('Admin');
       expect(state.profiles[0]?.scope.origin).toBe('https://x.test');
+      // Снимок = живая сессия: новый профиль сразу помечен активным для origin.
+      expect(state.activeByOrigin['https://x.test']).toBe(state.profiles[0]?.id);
     });
+    expect(await screen.findByText(t('sessionProfiles.active'))).toBeInTheDocument();
   });
 
   it('switching opens a confirm dialog, then applies the swap plan and reports', async () => {
