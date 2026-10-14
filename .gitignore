@@ -12,3 +12,6 @@ test-results
 
 # QA-артефакты и отчёты — не тащим в публичный репозиторий
 docs/qa/
+
+# Локальная staging-папка для загрузки в Chrome Web Store (дубли docs/assets + сборка)
+store-assets/
