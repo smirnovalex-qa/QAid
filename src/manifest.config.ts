@@ -28,12 +28,15 @@ type QaManifest = ManifestV3Export & {
  */
 const manifest: QaManifest = {
   manifest_version: 3,
-  name: 'QAid',
-  description:
-    'Консолидированный набор QA-инструментов: генераторы, инспектор, storage, декодеры. Локально и приватно.',
+  // Локализованные имя и описание (ADR-0011/TASK-002): берутся из
+  // `_locales/<lang>/messages.json` по языку пользователя, фолбэк — `default_locale`
+  // (en). Задаём плейсхолдерами `__MSG_*__`, а не литералами, иначе Chrome показывал
+  // бы один язык всем. Тексты — в `public/_locales/{en,ru}/messages.json`.
+  name: '__MSG_appName__',
+  description: '__MSG_appDesc__',
   version: toExtensionVersion(pkg.version),
   version_name: pkg.version,
-  default_locale: 'ru',
+  default_locale: 'en',
   icons: {
     '16': 'src/assets/icons/icon-16.png',
     '32': 'src/assets/icons/icon-32.png',
